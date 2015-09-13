@@ -12,7 +12,7 @@ namespace DBSync.Connection
     public class MySQLConnection
     {
         /// <summary>
-        /// Variable de conexión a base de datos
+        /// Variable de conexión a base de datos de MySQL
         /// </summary>
         private MySqlConnection conexion;
 
@@ -120,13 +120,13 @@ namespace DBSync.Connection
         /// </summary>
         /// <param name="dpi">Numero de DPI que identifique al contacto que se desea modificar</param>
         /// <returns>Cantidad de tuplas afectadas</returns>
-        public int Update(String dpi)
+        public int modificarContacto(String dpi)
         {
 
             rowsAffected = 0;
 
             query = String.Empty;
-            query = "UPDATE contacto SET dpi='{0}', nombre='{1}', apellido='{2}', direccion='{3}', telefono_casa='{4}', telefono_movil='{5}', nombre_contacto='{6}', numero_telefono_contacto='{7}'";
+            query = "UPDATE contacto SET dpi='{0}', nombre='{1}', apellido='{2}', direccion='{3}', telefono_casa='{4}', telefono_movil='{5}', nombre_contacto='{6}', numero_telefono_contacto='{7}' WHERE dpi='{0}'";
             //query = String.Format(query, dpi);
 
             //Open connection
@@ -150,7 +150,7 @@ namespace DBSync.Connection
         /// </summary>
         /// <param name="dpi">Numero de DPI que identifique al contacto que se desea eliminar</param>
         /// <returns>Cantidad de tuplas afectadas</returns>
-        public int Delete(String dpi)
+        public int eliminarContacto(String dpi)
         {
 
             rowsAffected = 0;
