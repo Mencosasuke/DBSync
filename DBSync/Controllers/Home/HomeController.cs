@@ -19,20 +19,20 @@ namespace DBSync.Controllers.Home
             //MySQLConnection conexionMySql = new MySQLConnection();
             //PostgreSQLConnection conexionPostgreSQL = new PostgreSQLConnection();
 
-            //if (conexionPostgreSQL.insertarContacto() > 0)
+            //if (conexionPostgreSQL.InsertarContacto() > 0)
             //{
             //    Debug.WriteLine("Al parecer si hizo el insert :)");
             //}
-            //if (conexionMySql.insertarContacto() > 0)
+            //if (conexionMySql.InsertarContacto() > 0)
             //{
             //    Debug.WriteLine("Al parecer si hizo el insert :)");
             //}
 
-            //if (conexionPostgreSQL.eliminarContacto("2567648320101") > 0)
+            //if (conexionPostgreSQL.EliminarContacto("2567648320101") > 0)
             //{
             //    Debug.WriteLine("Al parecer si borro la tupla :)");
             //}
-            //if (conexionMySql.eliminarContacto("2567648320101") > 0)
+            //if (conexionMySql.EliminarContacto("2567648320101") > 0)
             //{
             //    Debug.WriteLine("Al parecer si borro la tupla :)");
             //}

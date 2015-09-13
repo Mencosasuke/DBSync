@@ -90,7 +90,7 @@ namespace DBSync.Connection
         /// Metodo para hacer un insert a la base de datos MySQL
         /// </summary>
         /// <returns>Cantidad de tuplas afectadas</returns>
-        public int insertarContacto()
+        public int InsertarContacto()
         {
             rowsAffected = 0;
 
@@ -120,7 +120,7 @@ namespace DBSync.Connection
         /// </summary>
         /// <param name="dpi">Numero de DPI que identifique al contacto que se desea modificar</param>
         /// <returns>Cantidad de tuplas afectadas</returns>
-        public int modificarContacto(String dpi)
+        public int ModificarContacto(String dpi)
         {
 
             rowsAffected = 0;
@@ -150,7 +150,7 @@ namespace DBSync.Connection
         /// </summary>
         /// <param name="dpi">Numero de DPI que identifique al contacto que se desea eliminar</param>
         /// <returns>Cantidad de tuplas afectadas</returns>
-        public int eliminarContacto(String dpi)
+        public int EliminarContacto(String dpi)
         {
 
             rowsAffected = 0;
