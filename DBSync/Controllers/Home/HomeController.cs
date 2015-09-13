@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-using System.Diagnostics;
 using DBSync.Connection;
 
 namespace DBSync.Controllers.Home
@@ -16,7 +15,12 @@ namespace DBSync.Controllers.Home
 
         public ActionResult Index()
         {
-            MySQLConnection conexionMySql = new MySQLConnection();
+            //MySQLConnection conexionMySql = new MySQLConnection();
+            //PostgreSQLConnection conexionPostgreSQL = new PostgreSQLConnection();
+            //if (conexionPostgreSQL.insertarContacto() > 0)
+            //{
+            //    Debug.WriteLine("Al parecer si hizo el insert :)");
+            //}
             //if (conexionMySql.insertarContacto() > 0)
             //{
             //    Debug.WriteLine("Al parecer si hizo el insert :)");

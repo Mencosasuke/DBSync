@@ -5,50 +5,41 @@ using System.Web;
 
 using System.Diagnostics;
 using System.Configuration;
-using MySql.Data.MySqlClient;
+using Npgsql;
 
 namespace DBSync.Connection
 {
-    public class MySQLConnection
+    public class PostgreSQLConnection
     {
+
         /// <summary>
-        /// Variable de conexión a base de datos de MySQL
+        /// Variable de conexión a base de datos de PostgreSQL
         /// </summary>
-        private MySqlConnection conexion;
+        private NpgsqlConnection conexion;
 
         /// <summary>
         /// Constructor de la clase conexión
         /// </summary>
-        public MySQLConnection()
+        public PostgreSQLConnection()
         {
-            conexion = new MySqlConnection(ConfigurationManager.ConnectionStrings["MySql"].ConnectionString);
+            conexion = new NpgsqlConnection(ConfigurationManager.ConnectionStrings["PostgreSQL"].ConnectionString);
         }
 
         /// <summary>
         /// Metodo para abrir la conexión a la base de datos MySQL
         /// </summary>
         /// <returns>Valor booleano para indicar si la conexión fue exitosa o no</returns>
-        private bool Open()
+        private bool open()
         {
             try
             {
                 conexion.Open();
                 Debug.WriteLine("Conexión a la base de datos exitosa");
                 return true;
-            }catch(MySqlException e)
+            }
+            catch (NpgsqlException e)
             {
-                //0: Cannot connect to server.
-                //1045: Invalid user name and/or password.
-                switch (e.Number)
-                {
-                    case 0:
-                        Debug.WriteLine("Imposible conectar al servidor.");
-                        break;
-                    case 1045:
-                        Debug.WriteLine("Nombre de usuario o contraseña invalida.");
-                        break;
-                }
-
+                Debug.WriteLine(e.Message);
                 return false;
             }
         }
@@ -57,14 +48,14 @@ namespace DBSync.Connection
         /// Metodo para cerrar la conexion a la base de datos MySQL
         /// </summary>
         /// <returns>Valor booleando par aindicar si la conexion fue exitosa o no</returns>
-        private bool Close()
+        private bool close()
         {
             try
             {
                 conexion.Close();
                 return true;
             }
-            catch (MySqlException e)
+            catch (NpgsqlException e)
             {
                 Debug.WriteLine(e.Message);
                 return false;
@@ -82,21 +73,22 @@ namespace DBSync.Connection
             String query = "INSERT INTO contacto (dpi, nombre, apellido, direccion, telefono_casa, telefono_movil, nombre_contacto, numero_telefono_contacto) VALUES('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}')";
             query = String.Format(query, "2567648320101", "David", "Mencos", "Mi Casa", "numero1", "numero2", "Contacto 1", "numero 3");
 
-            // Abre conexión
-            if (this.Open())
+            // Abre la conexión
+            if (this.open())
             {
                 // Crea la sentencia de ejecución del query
-                MySqlCommand cmd = new MySqlCommand(query, conexion);
+                NpgsqlCommand cmd = new NpgsqlCommand(query, conexion);
 
                 // Ejecuta la sentencia
                 rowsAffected = cmd.ExecuteNonQuery();
                 Debug.WriteLine("Sentencia ejecutada exitosamente");
 
                 // Cierra la conexión
-                this.Close();
+                this.close();
             }
 
             return rowsAffected;
         }
+
     }
 }
