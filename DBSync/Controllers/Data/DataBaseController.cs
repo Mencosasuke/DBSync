@@ -89,7 +89,7 @@ namespace DBSync.Controllers.Home
             Contacto newContacto = new Contacto();
 
             newContacto.dpi = txtDpi;
-            newContacto.nombreContacto = txtNombre;
+            newContacto.nombre = txtNombre;
             newContacto.apellido = txtApellido;
             newContacto.direccion = txtDireccion;
             newContacto.telefonoCasa = txtTelefonoCasa;
@@ -120,7 +120,7 @@ namespace DBSync.Controllers.Home
             Contacto newContacto = new Contacto();
 
             newContacto.dpi = txtDpi;
-            newContacto.nombreContacto = txtNombre;
+            newContacto.nombre = txtNombre;
             newContacto.apellido = txtApellido;
             newContacto.direccion = txtDireccion;
             newContacto.telefonoCasa = txtTelefonoCasa;
