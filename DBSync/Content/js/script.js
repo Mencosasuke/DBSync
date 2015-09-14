@@ -18,12 +18,15 @@ $(document).ready(function(){
     events.initialize = (function(){
 
 		// Carga los eventos para los botones de mantenimiento y agreagar
-		function eventosBotonesMantenimiento(panel){
+		function eventosBotonesMantenimiento(panel, accion){
 			var $mantenimientoMySQL = $("#mantenimientoMySQL"),
 				$nuevoMySQL = $("#nuevoMySQL"),
+				$modificarMySQL = $("#modificarMySQL"),
 				$btnCancelarNuevoMySQL = $("#btnCancelarNuevoMySQL"),
+				$btnCancelarModifyMySQL = $("#btnCancelarModifyMySQL"),
 				$panelMantenimientoMySQL = $("#panelMantenimientoMySQL"),
 				$panelAddMySQL = $("#panelAddMySQL"),
+				$panelModifyMySQL = $("#panelModifyMySQL"),
 				$mantenimientoPgSQL = $("#mantenimientoPgSQL"),
 				$nuevoPgSQL = $("#nuevoPgSQL"),
 				$btnCancelarNuevoPgSQL = $("#btnCancelarNuevoPgSQL"),
@@ -37,6 +40,16 @@ $(document).ready(function(){
 			}else{
 				$("#mysqlTab").parent().siblings().removeClass("active");
 				$("#mysqlTab").parent().addClass("active");
+				
+				if(accion === "modificar"){
+					$modificarMySQL.parent().siblings().removeClass("active");
+					$modificarMySQL.parent().addClass("active");
+					$modificarMySQL.parent().removeClass("disabled");
+
+					$panelMantenimientoMySQL.addClass("hidden");
+					$panelAddMySQL.addClass("hidden");
+					$panelModifyMySQL.removeClass("hidden");
+				}
 			}
 
 			$mantenimientoMySQL.on("click", function(){
@@ -44,9 +57,13 @@ $(document).ready(function(){
 
 				$this.parent().siblings().removeClass("active");
 				$this.parent().addClass("active");
+				$modificarMySQL.parent().addClass("disabled");
 
 				$panelMantenimientoMySQL.removeClass("hidden");
 				$panelAddMySQL.addClass("hidden");
+				$panelModifyMySQL.addClass("hidden");
+
+				$modificarMySQL.unbind("click");
 			});
 			
 			$nuevoMySQL.on("click", function(){
@@ -54,14 +71,36 @@ $(document).ready(function(){
 
 				$this.parent().siblings().removeClass("active");
 				$this.parent().addClass("active");
+				$modificarMySQL.parent().addClass("disabled");
 
 				$panelMantenimientoMySQL.addClass("hidden");
 				$panelAddMySQL.removeClass("hidden");
+				$panelModifyMySQL.addClass("hidden");
 
 				$("#txtDpi").attr("required", "required");
 				$("#txtNombre").attr("required", "required");
 				$("#txtApellido").attr("required", "required");
+
+				$modificarMySQL.unbind("click");
 			});
+
+			if(accion === "modificar"){
+				$modificarMySQL.on("click", function(){
+					var $this = $(this);
+
+					$this.parent().siblings().removeClass("active");
+					$this.parent().addClass("active");
+					$this.parent().removeClass("disabled");
+
+					$panelMantenimientoMySQL.addClass("hidden");
+					$panelAddMySQL.addClass("hidden");
+					$panelModifyMySQL.removeClass("hidden");
+				});
+
+				accion = "";
+			}else{
+				$modificarMySQL.unbind("click");
+			}
 
 			$btnCancelarNuevoMySQL.on("click", function(e){
 				e.preventDefault();
@@ -72,6 +111,18 @@ $(document).ready(function(){
 
 				$panelMantenimientoMySQL.removeClass("hidden");
 				$panelAddMySQL.addClass("hidden");
+			});
+
+			$btnCancelarModifyMySQL.on("click", function(e){
+				e.preventDefault();
+				e.stopPropagation();
+
+				$mantenimientoMySQL.parent().siblings().removeClass("active");
+				$mantenimientoMySQL.parent().addClass("active");
+
+				$panelMantenimientoMySQL.removeClass("hidden");
+				$panelAddMySQL.addClass("hidden");
+				$panelModifyMySQL.addClass("hidden");
 			});
 
 			$mantenimientoPgSQL.on("click", function(){
@@ -142,6 +193,12 @@ $(document).ready(function(){
 						success: function(view) {
 							// Inserta el contenido de la vista parcial en el workspace
 							$workspace.html(view);
+							console.log("evento lanzado");
+							// Activa los botones para eliminar y modificar
+							eventosBotonesMantenimiento("mysql", "modificar");
+
+							// Activa los botones para eliminar y modificar
+							ActivarBotonesModificar();
 						}
 					});
 				});
