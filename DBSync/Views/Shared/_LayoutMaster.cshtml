@@ -36,9 +36,9 @@
             </div>
             <div id="navbar" class="navbar-collapse collapse" aria-expanded="false" style="height: 1px;">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="#"><i class="fa fa-cogs fa-lg"></i>&nbsp; Management</a></li>
-                    <li><a href="#"><i class="fa fa-user fa-lg"></i>&nbsp; Profile</a></li>
-                    <li><a href="#"><i class="fa fa-question-circle fa-lg"></i>&nbsp; About</a></li>
+                    <li @(ViewBag.ActiveTab == "Management" ? "class=active" : null)><a href="#"><i class="fa fa-cogs fa-lg"></i>&nbsp; Management</a></li>
+                    <li @(ViewBag.ActiveTab == "Profile" ? "class=active" : null)><a href="#"><i class="fa fa-user fa-lg"></i>&nbsp; Profile</a></li>
+                    <li @(ViewBag.ActiveTab == "About" ? "class=active" : null)><a href="#"><i class="fa fa-question-circle fa-lg"></i>&nbsp; About</a></li>
                 </ul>
             </div><!--/.nav-collapse -->
         </div>

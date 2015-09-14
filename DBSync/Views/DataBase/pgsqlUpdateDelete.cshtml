@@ -1,11 +1,57 @@
-﻿<ul class="nav nav-pills">
+﻿@using DBSync.Models
+
+@{
+    List<Contacto> listaContactos = (List<Contacto>)ViewBag.ListaContactos;
+}
+
+<ul class="nav nav-pills">
     <li role="presentation" class="active"><a id="mantenimientoPgSQL" href="#">Mantenimiento</a></li>
     <li role="presentation"><a id="nuevoPgSQL" href="#">Nuevo</a></li>
 </ul>
 <br />
 <div id="panelMantenimientoPgSQL" class="panel panel-primary">
     <div class="panel-body">
-        MANTENIMIENTO PGSQL
+        <div class="panel panel-default">
+            <div class="panel-heading">Contactos almacenados en base de datos PostgreSQL</div>
+            <table class="table textCentered">
+                <thead>
+                    <tr>
+                        <th>DPI</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Dirección</th>
+                        <th>Teléfono Casa</th>
+                        <th>Teléfono Móvil</th>
+                        <th>Nombre Contacto</th>
+                        <th>Teléfono Contacto</th>
+                        <th> - </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Contacto contacto in listaContactos)
+                    {
+                        <tr>
+                            <td>@contacto.dpi</td>
+                            <td>@contacto.nombre</td>
+                            <td>@contacto.apellido</td>
+                            <td>@contacto.direccion</td>
+                            <td>@contacto.telefonoCasa</td>
+                            <td>@contacto.telefonoMovil</td>
+                            <td>@contacto.nombreContacto</td>
+                            <td>@contacto.numeroContacto</td>
+                            <td>
+                                <button class="btn btn-info" type="button">
+                                    @Html.ActionLink("Modificar", "ModificarPgSQL", "DataBase", new { dpi = contacto.dpi }, new { @style = "color:#FFF;" })
+                                </button>
+                                <button class="btn btn-danger" type="button">
+                                    @Html.ActionLink("Eliminar", "EliminarPgSQL", "DataBase", new { dpi = contacto.dpi }, new { @style = "color:#FFF;" })
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 <div id="panelAddPgSQL" class="panel panel-primary hidden">
