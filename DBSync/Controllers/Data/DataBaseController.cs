@@ -56,11 +56,18 @@ namespace DBSync.Controllers.Home
         /// <summary>
         /// Renderiza la vista parcial para el mantenimiento de contactos PostgreSQL
         /// </summary>
+        /// <param name="modContacto">Contacto a modificar (opcional)</param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult pgsqlUpdateDelete()
+        public ActionResult pgsqlUpdateDelete(Contacto modContacto)
         {
             DataHelper dataHelper = new DataHelper();
+
+            if (modContacto.dpi != null)
+            {
+                ViewBag.ContactoModificar = modContacto;
+            }
+
             List<Contacto> listaContactos = new List<Contacto>();
 
             // Arma la lista de los contactos obtenidos en la base de datos de PostgreSQL

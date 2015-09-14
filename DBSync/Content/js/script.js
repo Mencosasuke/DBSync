@@ -29,14 +29,27 @@ $(document).ready(function(){
 				$panelModifyMySQL = $("#panelModifyMySQL"),
 				$mantenimientoPgSQL = $("#mantenimientoPgSQL"),
 				$nuevoPgSQL = $("#nuevoPgSQL"),
+				$modificarPgSQL = $("#modificarPgSQL"),
 				$btnCancelarNuevoPgSQL = $("#btnCancelarNuevoPgSQL"),
+				$btnCancelarModifyPgSQL = $("#btnCancelarModifyPgSQL"),
 				$panelMantenimientoPgSQL = $("#panelMantenimientoPgSQL"),
-				$panelAddPgSQL = $("#panelAddPgSQL");
+				$panelAddPgSQL = $("#panelAddPgSQL"),
+				$panelModifyPgSQL = $("#panelModifyPgSQL");
 
 			// Defino los estilos active para los elementos segun el panel cargado
 			if(panelToLoad === "pgsql"){
 				$("#pgsqlTab").parent().siblings().removeClass("active");
 				$("#pgsqlTab").parent().addClass("active");
+
+				if(accion === "modificar"){
+					$modificarPgSQL.parent().siblings().removeClass("active");
+					$modificarPgSQL.parent().addClass("active");
+					$modificarPgSQL.parent().removeClass("disabled");
+
+					$panelMantenimientoPgSQL.addClass("hidden");
+					$panelAddPgSQL.addClass("hidden");
+					$panelModifyPgSQL.removeClass("hidden");
+				}
 			}else{
 				$("#mysqlTab").parent().siblings().removeClass("active");
 				$("#mysqlTab").parent().addClass("active");
@@ -119,10 +132,13 @@ $(document).ready(function(){
 
 				$mantenimientoMySQL.parent().siblings().removeClass("active");
 				$mantenimientoMySQL.parent().addClass("active");
+				$modificarMySQL.parent().addClass("disabled");
 
 				$panelMantenimientoMySQL.removeClass("hidden");
 				$panelAddMySQL.addClass("hidden");
 				$panelModifyMySQL.addClass("hidden");
+
+				$modificarMySQL.unbind("click");
 			});
 
 			$mantenimientoPgSQL.on("click", function(){
@@ -130,9 +146,13 @@ $(document).ready(function(){
 
 				$this.parent().siblings().removeClass("active");
 				$this.parent().addClass("active");
+				$modificarPgSQL.parent().addClass("disabled");
 
 				$panelMantenimientoPgSQL.removeClass("hidden");
 				$panelAddPgSQL.addClass("hidden");
+				$panelModifyPgSQL.addClass("hidden");
+
+				$modificarPgSQL.unbind("click");
 			});
 
 			$nuevoPgSQL.on("click", function(){
@@ -140,14 +160,36 @@ $(document).ready(function(){
 
 				$this.parent().siblings().removeClass("active");
 				$this.parent().addClass("active");
+				$modificarPgSQL.parent().addClass("disabled");
 
 				$panelMantenimientoPgSQL.addClass("hidden");
 				$panelAddPgSQL.removeClass("hidden");
+				$panelModifyPgSQL.addClass("hidden");
 
 				$("#txtDpi").attr("required", "required");
 				$("#txtNombre").attr("required", "required");
 				$("#txtApellido").attr("required", "required");
+
+				$modificarPgSQL.unbind("click");
 			});
+
+			if(accion === "modificar"){
+				$modificarPgSQL.on("click", function(){
+					var $this = $(this);
+
+					$this.parent().siblings().removeClass("active");
+					$this.parent().addClass("active");
+					$this.parent().removeClass("disabled");
+
+					$panelMantenimientoPgSQL.addClass("hidden");
+					$panelAddPgSQL.addClass("hidden");
+					$panelModifyPgSQL.removeClass("hidden");
+				});
+
+				accion = "";
+			}else{
+				$modificarPgSQL.unbind("click");
+			}
 
 			$btnCancelarNuevoPgSQL.on("click", function(e){
 				e.preventDefault();
@@ -160,18 +202,33 @@ $(document).ready(function(){
 				$panelAddPgSQL.addClass("hidden");
 			});
 
+			$btnCancelarModifyPgSQL.on("click", function(e){
+				e.preventDefault();
+				e.stopPropagation();
+
+				$mantenimientoPgSQL.parent().siblings().removeClass("active");
+				$mantenimientoPgSQL.parent().addClass("active");
+				$modificarPgSQL.parent().addClass("disabled");
+
+				$panelMantenimientoPgSQL.removeClass("hidden");
+				$panelAddPgSQL.addClass("hidden");
+				$panelModifyPgSQL.addClass("hidden");
+
+				$modificarPgSQL.unbind("click");
+			});
+
 		};
 
-		// Acción para el botón de modificar contacto MySQL
+		// Acción para el botón de modificar contacto MySQL y PostgreSQL
 		function ActivarBotonesModificar(){
-			var $btnModificarContactoMySQL = $(".btnModificarContactoMySQL");
+			var $btnModificarContactoMySQL = $(".btnModificarContactoMySQL"),
+				$btnModificarContactoPgSQL = $(".btnModificarContactoPgSQL")
 
 			$btnModificarContactoMySQL.each(function(){
 				var $this = $(this);
 
 				$this.on("click", function(){
 					var contacto = JSON.parse($this.attr("data-id"));
-					//var contacto = $this.attr("data-id");
 
 					var newContacto = {
 						dpi : contacto.dpi,
@@ -183,7 +240,7 @@ $(document).ready(function(){
 						nombreContacto : contacto.nombreContacto,
 						numeroContacto : contacto.numeroContacto
 					};
-					console.log(newContacto);
+
 					$.ajax({
 						type: "POST",
 						url: root + "DataBase/mysqlUpdateDelete",
@@ -202,7 +259,43 @@ $(document).ready(function(){
 						}
 					});
 				});
+			});
 
+			$btnModificarContactoPgSQL.each(function(){
+				var $this = $(this);
+
+				$this.on("click", function(){
+					var contacto = JSON.parse($this.attr("data-id"));
+
+					var newContacto = {
+						dpi : contacto.dpi,
+						nombre : contacto.nombre,
+						apellido : contacto.apellido,
+						direccion : contacto.direccion,
+						telefonoCasa : contacto.telefonoCasa,
+						telefonoMovil : contacto.telefonoMovil,
+						nombreContacto : contacto.nombreContacto,
+						numeroContacto : contacto.numeroContacto
+					};
+
+					$.ajax({
+						type: "POST",
+						url: root + "DataBase/pgsqlUpdateDelete",
+						contentType: "application/json",
+						data: JSON.stringify({ modContacto : newContacto }),
+						dataType: 'html',
+						success: function(view) {
+							// Inserta el contenido de la vista parcial en el workspace
+							$workspace.html(view);
+							console.log("evento lanzado");
+							// Activa los botones para eliminar y modificar
+							eventosBotonesMantenimiento("pgsql", "modificar");
+
+							// Activa los botones para eliminar y modificar
+							ActivarBotonesModificar();
+						}
+					});
+				});
 			});
 		};
 

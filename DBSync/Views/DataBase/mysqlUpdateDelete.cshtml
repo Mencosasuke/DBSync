@@ -97,7 +97,7 @@
             @using (@Html.BeginForm("ModificarContactoMySQL", "DataBase", FormMethod.Post))
             {
                 <fieldset>
-                    <legend>Nuevo Contacto MySQL</legend>
+                    <legend>Modificar Contacto MySQL</legend>
                     <input type="hidden" name="dpiOriginal" id="dpiOriginal" value="@(modificarContacto.dpi ?? String.Empty)" />
                     <label for="txtDpi2">DPI:</label>
                     <input id="txtDpi2" name="txtDpi2" type="text" class="form-control" placeholder="DPI" aria-describedby="basic-addon1" value="@(modificarContacto.dpi ?? String.Empty)" /><br />

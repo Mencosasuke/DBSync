@@ -117,8 +117,9 @@ namespace DBSync.Connection
         /// Metodo para modificar un contacto de la base de datos PostrgreSQL
         /// </summary>
         /// <param name="dpi">Numero de DPI que identifique al contacto que se desea modificar</param>
+        /// <param name="contacto">Modelo de contacto con los posibles nuevos valores</param>
         /// <returns>Cantidad de tuplas afectadas</returns>
-        public int ModificarContacto(String dpi)
+        public int ModificarContacto(String dpi, Contacto contacto)
         {
 
             rowsAffected = 0;

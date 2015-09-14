@@ -1,13 +1,15 @@
 ﻿@using DBSync.Models
+@using System.Web.Script.Serialization
 
 @{
     List<Contacto> listaContactos = (List<Contacto>)ViewBag.ListaContactos;
+    Contacto modificarContacto = ViewBag.ContactoModificar ?? null;
 }
 
 <ul class="nav nav-pills">
     <li role="presentation" class="active"><a id="mantenimientoPgSQL" href="#">Mantenimiento</a></li>
     <li role="presentation"><a id="nuevoPgSQL" href="#">Nuevo</a></li>
-    <li role="presentation" class="disabled"><a id="modificarPgSQL" href="#">Modificar</a></li>
+    <li role="presentation" @(modificarContacto == null ? "class=disabled" : "" ) ><a id="modificarPgSQL" href="#">Modificar</a></li>
 </ul>
 <br />
 <div id="panelMantenimientoPgSQL" class="panel">
@@ -31,6 +33,8 @@
                 <tbody>
                     @foreach (Contacto contacto in listaContactos)
                     {
+                        String jsonString = new JavaScriptSerializer().Serialize(contacto);
+                        
                         <tr>
                             <td>@contacto.dpi</td>
                             <td>@contacto.nombre</td>
@@ -41,8 +45,9 @@
                             <td>@contacto.nombreContacto</td>
                             <td>@contacto.numeroContacto</td>
                             <td>
-                                <button class="btn btn-info" type="button">
-                                    @Html.ActionLink("Modificar", "mysqlUpdateDelete", "DataBase", new { modContacto = contacto }, new { @style = "color:#FFF;" })
+                                <button data-id="@jsonString" class="btn btn-info btnModificarContactoPgSQL" type="button">
+                                    @*@Html.ActionLink("Modificar", "mysqlUpdateDelete", "DataBase", new { modContacto = contacto }, new { @style = "color:#FFF;" })*@
+                                    Modificar
                                 </button>
                                 <button class="btn btn-danger" type="button">
                                     @Html.ActionLink("Eliminar", "EliminarPgSQL", "DataBase", new { dpi = contacto.dpi }, new { @style = "color:#FFF;" })
@@ -85,3 +90,37 @@
         }
     </div>
 </div>
+@if (modificarContacto != null)
+{
+    <div id="panelModifyPgSQL" class="panel hidden">
+        <div class="panel-body">
+            @using (@Html.BeginForm("ModificarContactoPgSQL", "DataBase", FormMethod.Post))
+            {
+                <fieldset>
+                    <legend>Modificar Contacto PgSQL</legend>
+                    <input type="hidden" name="dpiOriginal" id="dpiOriginal" value="@(modificarContacto.dpi ?? String.Empty)" />
+                    <label for="txtDpi2">DPI:</label>
+                    <input id="txtDpi2" name="txtDpi2" type="text" class="form-control" placeholder="DPI" aria-describedby="basic-addon1" value="@(modificarContacto.dpi ?? String.Empty)" /><br />
+                    <label for="txtNombre2">Nombre:</label>
+                    <input id="txtNombre2"  name="txtNombre2" type="text" class="form-control" placeholder="Nombre" aria-describedby="basic-addon1" value="@(modificarContacto.nombre ?? String.Empty)"/><br />
+                    <label for="txtApellido2">Apellido:</label>
+                    <input id="txtApellido2" name="txtApellido2" type="text" class="form-control" placeholder="Apellido" aria-describedby="basic-addon1" value="@(modificarContacto.apellido ?? String.Empty)"/><br />
+                    <label for="txtDireccion2">Dirección:</label>
+                    <input id="txtDireccion2" name="txtDireccion2" type="text" class="form-control" placeholder="Dirección" aria-describedby="basic-addon1" value="@(modificarContacto.direccion ?? String.Empty)"/><br />
+                    <label for="txtTelefonoCasa2">Teléfono Casa:</label>
+                    <input id="txtTelefonoCasa2" name="txtTelefonoCasa2" type="text" class="form-control" placeholder="Teléfono de casa" aria-describedby="basic-addon1" value="@(modificarContacto.telefonoCasa ?? String.Empty)"/><br />
+                    <label for="txtTelefonoMovil2">Teléfono Móvil:</label>
+                    <input id="txtTelefonoMovil2" name="txtTelefonoMovil2" type="text" class="form-control" placeholder="Teléfono de móvil" aria-describedby="basic-addon1" value="@(modificarContacto.telefonoMovil ?? String.Empty)"/><br />
+                    <label for="txtNombreContacto2">Nombre Contacto:</label>
+                    <input id="txtNombreContacto2" name="txtNombreContacto2" type="text" class="form-control" placeholder="Nombre de contacto" aria-describedby="basic-addon1" value="@(modificarContacto.nombreContacto ?? String.Empty)"/><br />
+                    <label for="txtTelefonoContacto2">Teléfono Contacto:</label>
+                    <input id="txtTelefonoContacto2" name="txtTelefonoContacto2" type="text" class="form-control" placeholder="Teléfono de contacto" aria-describedby="basic-addon1" value="@(modificarContacto.numeroContacto ?? String.Empty)"/><br />
+                    <div class="btn-group">
+                        <input type="submit" value="Aceptar" class="btn btn-success" />
+                        <input id="btnCancelarModifyPgSQL" type="submit" value="Cancelar" class="btn btn-danger" />
+                    </div>
+                </fieldset>
+            }
+        </div>
+    </div>
+}
