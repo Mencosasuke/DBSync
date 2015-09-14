@@ -1,0 +1,83 @@
+﻿@using DBSync.Models
+
+@{
+    List<Contacto> listaContactos = (List<Contacto>)ViewBag.ListaContactos;
+}
+
+<ul class="nav nav-pills">
+    <li role="presentation" class="active"><a id="mantenimientoMySQL" href="#">Mantenimiento</a></li>
+    <li role="presentation"><a id="nuevoMySQL" href="#">Nuevo</a></li>
+</ul>
+<br />
+<div id="panelMantenimientoMySQL" class="panel panel-primary">
+    <div class="panel-body">
+        <div class="panel panel-default">
+            <div class="panel-heading">Contactos almacenados en base de datos MySQL</div>
+            <table class="table textCentered">
+                <thead>
+                    <tr>
+                        <th>DPI</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Dirección</th>
+                        <th>Teléfono Casa</th>
+                        <th>Teléfono Móvil</th>
+                        <th>Nombre Contacto</th>
+                        <th>Teléfono Contacto</th>
+                        <th> - </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Contacto contacto in listaContactos)
+                    {
+                        <tr>
+                            <td>@contacto.dpi</td>
+                            <td>@contacto.nombre</td>
+                            <td>@contacto.apellido</td>
+                            <td>@contacto.direccion</td>
+                            <td>@contacto.telefonoCasa</td>
+                            <td>@contacto.telefonoMovil</td>
+                            <td>@contacto.nombreContacto</td>
+                            <td>@contacto.numeroContacto</td>
+                            <td>
+                                <button class="btn btn-info" type="button">
+                                    @Html.ActionLink("Modificar", "ModificarMySQL", "DataBase", new { dpi = contacto.dpi }, new { @style = "color:#FFF;" })
+                                </button>
+                                <button class="btn btn-danger" type="button">
+                                    @Html.ActionLink("Eliminar", "EliminarMySQL", "DataBase", new { dpi = contacto.dpi }, new { @style = "color:#FFF;" })
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div id="panelAddMySQL" class="panel panel-primary hidden">
+    <div class="panel-body">
+        @using (@Html.BeginForm("InsertarContactoMySQL", "DataBase", FormMethod.Post))
+        {
+            <label for="txtDpi">DPI:</label>
+            <input id="txtDpi" name="txtDpi" type="text" class="form-control" placeholder="DPI" aria-describedby="basic-addon1" /><br />
+            <label for="txtNombre">Nombre:</label>
+            <input id="txtNombre"  name="txtNombre" type="text" class="form-control" placeholder="Nombre" aria-describedby="basic-addon1" /><br />
+            <label for="txtApellido">Apellido:</label>
+            <input id="txtApellido" name="txtApellido" type="text" class="form-control" placeholder="Apellido" aria-describedby="basic-addon1" /><br />
+            <label for="txtDireccion">Dirección:</label>
+            <input id="txtDireccion" name="txtDireccion" type="text" class="form-control" placeholder="Dirección" aria-describedby="basic-addon1" /><br />
+            <label for="txtTelefonoCasa">Teléfono Casa:</label>
+            <input id="txtTelefonoCasa" name="txtTelefonoCasa" type="text" class="form-control" placeholder="Teléfono de casa" aria-describedby="basic-addon1" /><br />
+            <label for="txtTelefonoMovil">Teléfono Móvil:</label>
+            <input id="txtTelefonoMovil" name="txtTelefonoMovil" type="text" class="form-control" placeholder="Teléfono de móvil" aria-describedby="basic-addon1" /><br />
+            <label for="txtNombreContacto">Nombre Contacto:</label>
+            <input id="txtNombreContacto" name="txtNombreContacto" type="text" class="form-control" placeholder="Nombre de contacto" aria-describedby="basic-addon1" /><br />
+            <label for="txtTelefonoContacto">Teléfono Contacto:</label>
+            <input id="txtTelefonoContacto" name="txtTelefonoContacto" type="text" class="form-control" placeholder="Teléfono de contacto" aria-describedby="basic-addon1" /><br />
+            <div class="btn-group">
+                <input type="submit" value="Aceptar" class="btn btn-primary" />
+                <input id="btnCancelarNuevoMySQL" type="submit" value="Cancelar" class="btn btn-danger" />
+            </div>
+        }
+    </div>
+</div>

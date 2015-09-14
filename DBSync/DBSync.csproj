@@ -127,11 +127,12 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="Connection\MySQLConnection.cs" />
     <Compile Include="Connection\PostgreSQLConnection.cs" />
-    <Compile Include="Controllers\Data\DataController.cs" />
+    <Compile Include="Controllers\Data\DataBaseController.cs" />
     <Compile Include="Controllers\Home\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helper\DataHelper.cs" />
     <Compile Include="Models\Contacto.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -162,10 +163,10 @@
     <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Data\mysqlUpdateDelete.cshtml" />
+    <Content Include="Views\DataBase\mysqlUpdateDelete.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Data\pgsqlUpdateDelete.cshtml" />
+    <Content Include="Views\DataBase\pgsqlUpdateDelete.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

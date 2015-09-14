@@ -14,16 +14,97 @@ $(document).ready(function(){
 
     events.initialize = (function(){
 
+		// Carga los eventos para los botones de mantenimiento y agreagar
+		function eventosBotonesMantenimiento(){
+			var $mantenimientoMySQL = $("#mantenimientoMySQL"),
+				$nuevoMySQL = $("#nuevoMySQL"),
+				$btnCancelarNuevoMySQL = $("#btnCancelarNuevoMySQL"),
+				$panelMantenimientoMySQL = $("#panelMantenimientoMySQL"),
+				$panelAddMySQL = $("#panelAddMySQL"),
+				$mantenimientoPgSQL = $("#mantenimientoPgSQL"),
+				$nuevoPgSQL = $("#nuevoPgSQL"),
+				$btnCancelarNuevoPgSQL = $("#btnCancelarNuevoPgSQL"),
+				$panelMantenimientoPgSQL = $("#panelMantenimientoPgSQL"),
+				$panelAddPgSQL = $("#panelAddPgSQL");
+
+
+			$mantenimientoMySQL.on("click", function(){
+				var $this = $(this);
+
+				$this.parent().siblings().removeClass("active");
+				$this.parent().addClass("active");
+
+				$panelMantenimientoMySQL.removeClass("hidden");
+				$panelAddMySQL.addClass("hidden");
+			});
+			
+			$nuevoMySQL.on("click", function(){
+				var $this = $(this);
+
+				$this.parent().siblings().removeClass("active");
+				$this.parent().addClass("active");
+
+				$panelMantenimientoMySQL.addClass("hidden");
+				$panelAddMySQL.removeClass("hidden");
+			});
+
+			$btnCancelarNuevoMySQL.on("click", function(e){
+				e.preventDefault();
+				e.stopPropagation();
+
+				$mantenimientoMySQL.parent().siblings().removeClass("active");
+				$mantenimientoMySQL.parent().addClass("active");
+
+				$panelMantenimientoMySQL.removeClass("hidden");
+				$panelAddMySQL.addClass("hidden");
+			});
+
+			$mantenimientoPgSQL.on("click", function(){
+				var $this = $(this);
+
+				$this.parent().siblings().removeClass("active");
+				$this.parent().addClass("active");
+
+				$panelMantenimientoPgSQL.removeClass("hidden");
+				$panelAddPgSQL.addClass("hidden");
+			});
+
+			$nuevoPgSQL.on("click", function(){
+				var $this = $(this);
+
+				$this.parent().siblings().removeClass("active");
+				$this.parent().addClass("active");
+
+				$panelMantenimientoPgSQL.addClass("hidden");
+				$panelAddPgSQL.removeClass("hidden");
+			});
+
+			$btnCancelarNuevoPgSQL.on("click", function(e){
+				e.preventDefault();
+				e.stopPropagation();
+
+				$mantenimientoPgSQL.parent().siblings().removeClass("active");
+				$mantenimientoPgSQL.parent().addClass("active");
+
+				$panelMantenimientoPgSQL.removeClass("hidden");
+				$panelAddPgSQL.addClass("hidden");
+			});
+		};
+
 		// Funcion para cargar el contenido de un workspace espeficico
 		function cargarWorkspace(pagina){
 			$.ajax({
 				type: "POST",
-				url: root + "Data/" + pagina,
+				url: root + "DataBase/" + pagina,
 				success: function(view) {
+					// Inserta el contenido de la vista parcial en el workspace
 					$workspace.html(view);
+
+					// Activa los eventos de los botones del workspace
+					eventosBotonesMantenimiento();
 				}
 			});
-		}
+		};
 
 		// Por defecto carga el workspace para MySQL
 		cargarWorkspace("mysqlUpdateDelete");
@@ -40,6 +121,7 @@ $(document).ready(function(){
 
 			// Muestra el workspace para MySQL
 			cargarWorkspace("mysqlUpdateDelete");
+
     	});
 
     	// Comportamiento del tab PostgreSQL
@@ -52,9 +134,8 @@ $(document).ready(function(){
 
 			// Muestra el workspace para PostgreSQL
 			cargarWorkspace("pgsqlUpdateDelete");
-    	});
 
-    	// Comportamiento de los contenidos de 
+    	});
 
     })();
 

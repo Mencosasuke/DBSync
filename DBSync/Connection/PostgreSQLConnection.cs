@@ -23,6 +23,11 @@ namespace DBSync.Connection
         private NpgsqlCommand cmd;
 
         /// <summary>
+        /// Variable donde se guarda el resultado de las consultas select
+        /// </summary>
+        private NpgsqlDataReader dataReader;
+
+        /// <summary>
         /// Variable que guarda la sentencia a ejecutar
         /// </summary>
         private String query;
@@ -162,6 +167,30 @@ namespace DBSync.Connection
             }
 
             return rowsAffected;
+        }
+
+        /// <summary>
+        /// Ejecuta la sentencia select para obtener todos los registros de la tabla contacto
+        /// </summary>
+        /// <returns>DataReader con todos los resultados obtenidos del select</returns>
+        public NpgsqlDataReader ObtenerRegistros()
+        {
+            dataReader = null;
+
+            query = String.Empty;
+            query = "SELECT * FROM contacto";
+
+            // Abre la conexion
+            if (this.Open())
+            {
+                // Crea la sentencia de ejecucion del select
+                cmd = new NpgsqlCommand(query, conexion);
+
+                // Ejecuta la sentencia y la guarda en el dataReader
+                dataReader = cmd.ExecuteReader();
+            }
+
+            return dataReader;
         }
 
     }

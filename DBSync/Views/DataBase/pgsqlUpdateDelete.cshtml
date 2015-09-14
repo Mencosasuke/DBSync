@@ -1,0 +1,37 @@
+﻿<ul class="nav nav-pills">
+    <li role="presentation" class="active"><a id="mantenimientoPgSQL" href="#">Mantenimiento</a></li>
+    <li role="presentation"><a id="nuevoPgSQL" href="#">Nuevo</a></li>
+</ul>
+<br />
+<div id="panelMantenimientoPgSQL" class="panel panel-primary">
+    <div class="panel-body">
+        MANTENIMIENTO PGSQL
+    </div>
+</div>
+<div id="panelAddPgSQL" class="panel panel-primary hidden">
+    <div class="panel-body">
+        @using (@Html.BeginForm("InsertarContactoPgSQL", "DataBase", FormMethod.Post))
+        {
+            <label for="txtDpi">DPI:</label>
+            <input id="txtDpi" name="txtDpi" type="text" class="form-control" placeholder="DPI" aria-describedby="basic-addon1"><br />
+            <label for="txtNombre">Nombre:</label>
+            <input id="txtNombre"  name="txtNombre" type="text" class="form-control" placeholder="Nombre" aria-describedby="basic-addon1"><br />
+            <label for="txtApellido">Apellido:</label>
+            <input id="txtApellido" name="txtApellido" type="text" class="form-control" placeholder="Apellido" aria-describedby="basic-addon1"><br />
+            <label for="txtDireccion">Dirección:</label>
+            <input id="txtDireccion" name="txtDireccion" type="text" class="form-control" placeholder="Dirección" aria-describedby="basic-addon1"><br />
+            <label for="txtTelefonoCasa">Teléfono Casa:</label>
+            <input id="txtTelefonoCasa" name="txtTelefonoCasa" type="text" class="form-control" placeholder="Teléfono de casa" aria-describedby="basic-addon1"><br />
+            <label for="txtTelefonoMovil">Teléfono Móvil:</label>
+            <input id="txtTelefonoMovil" name="txtTelefonoMovil" type="text" class="form-control" placeholder="Teléfono de móvil" aria-describedby="basic-addon1"><br />
+            <label for="txtNombreContacto">Nombre Contacto:</label>
+            <input id="txtNombreContacto" name="txtNombreContacto" type="text" class="form-control" placeholder="Nombre de contacto" aria-describedby="basic-addon1"><br />
+            <label for="txtTelefonoContacto">Teléfono Contacto:</label>
+            <input id="txtTelefonoContacto" name="txtTelefonoContacto" type="text" class="form-control" placeholder="Teléfono de contacto" aria-describedby="basic-addon1"><br />
+            <div class="btn-group">
+                <input type="submit" value="Aceptar" class="btn btn-primary" />
+                <input id="btnCancelarNuevoPgSQL" type="submit" value="Cancelar" class="btn btn-danger" />
+            </div>
+        }
+    </div>
+</div>

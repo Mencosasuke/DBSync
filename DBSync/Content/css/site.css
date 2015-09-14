@@ -2,3 +2,8 @@
 	margin-top: 50px;
 	padding: 15px;
 }
+
+.textCentered > thead > tr > th,
+.textCentered > tbody > tr > td{
+	text-align: center;
+}
