@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
+using DBSync.Models;
+
 using System.Diagnostics;
 using System.Configuration;
 using Npgsql;
@@ -86,13 +88,13 @@ namespace DBSync.Connection
         /// Metodo para hacer un insert a la base de datos PostgreSQL
         /// </summary>
         /// <returns></returns>
-        public int InsertarContacto()
+        public int InsertarContacto(Contacto contacto)
         {
             rowsAffected = 0;
 
             query = String.Empty;
             query = "INSERT INTO contacto (dpi, nombre, apellido, direccion, telefono_casa, telefono_movil, nombre_contacto, numero_telefono_contacto) VALUES('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}')";
-            query = String.Format(query, "2567648320101", "David", "Mencos", "Mi Casa", "numero1", "numero2", "Contacto 1", "numero 3");
+            query = String.Format(query, contacto.dpi, contacto.nombre, contacto.apellido, contacto.direccion, contacto.telefonoCasa, contacto.telefonoMovil, contacto.nombreContacto, contacto.numeroContacto);
 
             // Abre la conexión
             if (this.Open())

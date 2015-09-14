@@ -5,6 +5,9 @@ $(document).ready(function(){
 	// Workspaces MySQL y PostgreSQL
 	var $workspace = $("#workspace").first();
 
+	// Panel que debe ser cargado
+	var panelToLoad = $workspace.attr("data-load");
+
     var events = {
     	initialize : function() {}
     };
@@ -15,7 +18,7 @@ $(document).ready(function(){
     events.initialize = (function(){
 
 		// Carga los eventos para los botones de mantenimiento y agreagar
-		function eventosBotonesMantenimiento(){
+		function eventosBotonesMantenimiento(panel){
 			var $mantenimientoMySQL = $("#mantenimientoMySQL"),
 				$nuevoMySQL = $("#nuevoMySQL"),
 				$btnCancelarNuevoMySQL = $("#btnCancelarNuevoMySQL"),
@@ -27,6 +30,14 @@ $(document).ready(function(){
 				$panelMantenimientoPgSQL = $("#panelMantenimientoPgSQL"),
 				$panelAddPgSQL = $("#panelAddPgSQL");
 
+			// Defino los estilos active para los elementos segun el panel cargado
+			if(panelToLoad === "pgsql"){
+				$("#pgsqlTab").parent().siblings().removeClass("active");
+				$("#pgsqlTab").parent().addClass("active");
+			}else{
+				$("#mysqlTab").parent().siblings().removeClass("active");
+				$("#mysqlTab").parent().addClass("active");
+			}
 
 			$mantenimientoMySQL.on("click", function(){
 				var $this = $(this);
@@ -46,6 +57,10 @@ $(document).ready(function(){
 
 				$panelMantenimientoMySQL.addClass("hidden");
 				$panelAddMySQL.removeClass("hidden");
+
+				$("#txtDpi").attr("required", "required");
+				$("#txtNombre").attr("required", "required");
+				$("#txtApellido").attr("required", "required");
 			});
 
 			$btnCancelarNuevoMySQL.on("click", function(e){
@@ -77,6 +92,10 @@ $(document).ready(function(){
 
 				$panelMantenimientoPgSQL.addClass("hidden");
 				$panelAddPgSQL.removeClass("hidden");
+
+				$("#txtDpi").attr("required", "required");
+				$("#txtNombre").attr("required", "required");
+				$("#txtApellido").attr("required", "required");
 			});
 
 			$btnCancelarNuevoPgSQL.on("click", function(e){
@@ -89,10 +108,11 @@ $(document).ready(function(){
 				$panelMantenimientoPgSQL.removeClass("hidden");
 				$panelAddPgSQL.addClass("hidden");
 			});
+
 		};
 
 		// Funcion para cargar el contenido de un workspace espeficico
-		function cargarWorkspace(pagina){
+		function cargarWorkspace(pagina, panel){
 			$.ajax({
 				type: "POST",
 				url: root + "DataBase/" + pagina,
@@ -101,13 +121,17 @@ $(document).ready(function(){
 					$workspace.html(view);
 
 					// Activa los eventos de los botones del workspace
-					eventosBotonesMantenimiento();
+					eventosBotonesMantenimiento(panel);
 				}
 			});
 		};
 
-		// Por defecto carga el workspace para MySQL
-		cargarWorkspace("mysqlUpdateDelete");
+		// Carga el workspace especificado, si no se ha definido uno, por defecto carga MySQL
+		if(panelToLoad === "pgsql"){
+			cargarWorkspace("pgsqlUpdateDelete");
+		}else{
+			cargarWorkspace("mysqlUpdateDelete");
+		}
 
     	// Acción de los tabas principales de MySQL y PostgreSQL
 
@@ -118,6 +142,9 @@ $(document).ready(function(){
     		// Focus al tab correspondiente
     		$this.parent().siblings().removeClass("active");
 			$this.parent().addClass("active");
+
+			panelToLoad = "mysql";
+			$workspace.attr("data-load", panelToLoad);
 
 			// Muestra el workspace para MySQL
 			cargarWorkspace("mysqlUpdateDelete");
@@ -131,6 +158,9 @@ $(document).ready(function(){
     		// Focus al tab correspondiente
     		$this.parent().siblings().removeClass("active");
 			$this.parent().addClass("active");
+
+			panelToLoad = "pgsql";
+			$workspace.attr("data-load", panelToLoad);
 
 			// Muestra el workspace para PostgreSQL
 			cargarWorkspace("pgsqlUpdateDelete");

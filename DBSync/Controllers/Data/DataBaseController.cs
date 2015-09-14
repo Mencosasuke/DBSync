@@ -79,8 +79,20 @@ namespace DBSync.Controllers.Home
         [HttpPost]
         public ActionResult InsertarContactoMySQL(String txtDpi, String txtNombre, String txtApellido, String txtDireccion, String txtTelefonoCasa, String txtTelefonoMovil, String txtNombrecontacto, String txtTelefonoContacto)
         {
+            Contacto newContacto = new Contacto();
 
-            return RedirectToAction("Index", "Home");
+            newContacto.dpi = txtDpi;
+            newContacto.nombreContacto = txtNombre;
+            newContacto.apellido = txtApellido;
+            newContacto.direccion = txtDireccion;
+            newContacto.telefonoCasa = txtTelefonoCasa;
+            newContacto.telefonoMovil = txtTelefonoMovil;
+            newContacto.nombreContacto = txtNombrecontacto;
+            newContacto.numeroContacto = txtTelefonoContacto;
+
+            conexionMySQL.InsertarContacto(newContacto);
+
+            return RedirectToAction("Index", "Home", new { load = "mysql" });
         }
 
         /// <summary>
@@ -98,8 +110,20 @@ namespace DBSync.Controllers.Home
         [HttpPost]
         public ActionResult InsertarContactoPgSQL(String txtDpi, String txtNombre, String txtApellido, String txtDireccion, String txtTelefonoCasa, String txtTelefonoMovil, String txtNombrecontacto, String txtTelefonoContacto)
         {
+            Contacto newContacto = new Contacto();
 
-            return RedirectToAction("Index", "Home");
+            newContacto.dpi = txtDpi;
+            newContacto.nombreContacto = txtNombre;
+            newContacto.apellido = txtApellido;
+            newContacto.direccion = txtDireccion;
+            newContacto.telefonoCasa = txtTelefonoCasa;
+            newContacto.telefonoMovil = txtTelefonoMovil;
+            newContacto.nombreContacto = txtNombrecontacto;
+            newContacto.numeroContacto = txtTelefonoContacto;
+
+            conexionPgSQL.InsertarContacto(newContacto);
+
+            return RedirectToAction("Index", "Home", new { load = "pgsql" });
         }
 
     }
