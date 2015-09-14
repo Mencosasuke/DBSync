@@ -16,7 +16,7 @@
     <div class="panel-body">
         <div class="panel panel-default">
             <div class="panel-heading">Contactos almacenados en base de datos PostgreSQL</div>
-            <table class="table textCentered">
+            <table class="table table-striped textCentered">
                 <thead>
                     <tr>
                         <th>DPI</th>
@@ -45,11 +45,8 @@
                             <td>@contacto.nombreContacto</td>
                             <td>@contacto.numeroContacto</td>
                             <td>
-                                <button data-id="@jsonString" class="btn btn-info btnModificarContactoPgSQL" type="button">
-                                    @*@Html.ActionLink("Modificar", "mysqlUpdateDelete", "DataBase", new { modContacto = contacto }, new { @style = "color:#FFF;" })*@
-                                    Modificar
-                                </button>
-                                <button class="btn btn-danger" type="button">
+                                <button data-id="@jsonString" class="btn btn-info btn-sm btnModificarContactoPgSQL" type="button">Modificar</button>
+                                <button class="btn btn-danger btn-sm" type="button">
                                     @Html.ActionLink("Eliminar", "EliminarPgSQL", "DataBase", new { dpi = contacto.dpi }, new { @style = "color:#FFF;" })
                                 </button>
                             </td>

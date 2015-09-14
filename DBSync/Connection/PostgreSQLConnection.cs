@@ -125,8 +125,8 @@ namespace DBSync.Connection
             rowsAffected = 0;
 
             query = String.Empty;
-            query = "UPDATE contacto SET dpi='{0}', nombre='{1}', apellido='{2}', direccion='{3}', telefono_casa='{4}', telefono_movil='{5}', nombre_contacto='{6}', numero_telefono_contacto='{7}' WHERE dpi='{0}'";
-            //query = String.Format(query, dpi);
+            query = "UPDATE contacto SET dpi='{0}', nombre='{1}', apellido='{2}', direccion='{3}', telefono_casa='{4}', telefono_movil='{5}', nombre_contacto='{6}', numero_telefono_contacto='{7}' WHERE dpi='{8}'";
+            query = String.Format(query, contacto.dpi, contacto.nombre, contacto.apellido, contacto.direccion, contacto.telefonoCasa, contacto.telefonoMovil, contacto.nombreContacto, contacto.numeroContacto, dpi);
 
             //Open connection
             if (this.Open())
