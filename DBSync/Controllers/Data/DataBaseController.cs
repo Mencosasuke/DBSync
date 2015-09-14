@@ -31,16 +31,23 @@ namespace DBSync.Controllers.Home
         /// <summary>
         /// Renderiza la vista parcial para el mantenimiento de contactos MySQL
         /// </summary>
+        /// <param name="modContacto">Contacto a modificar (opcional)</param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult mysqlUpdateDelete()
+        public ActionResult mysqlUpdateDelete(Contacto modContacto)
         {
             DataHelper dataHelper = new DataHelper();
+
+            if (modContacto.dpi != null)
+            {
+                ViewBag.ContactoModificar = modContacto;
+            }
+
             List<Contacto> listaContactos = new List<Contacto>();
 
             // Arma la lista de los contactos obtenidos en la base de datos de MySQL
             listaContactos = dataHelper.ArmarListaContactosMySQL(conexionMySQL.ObtenerRegistros());
-            
+
             ViewBag.ListaContactos = listaContactos;
 
             return View();
@@ -122,6 +129,14 @@ namespace DBSync.Controllers.Home
             newContacto.numeroContacto = txtTelefonoContacto;
 
             conexionPgSQL.InsertarContacto(newContacto);
+
+            return RedirectToAction("Index", "Home", new { load = "pgsql" });
+        }
+
+        [HttpPost]
+        public ActionResult ModificarContactoMySQL(String dpiOriginal, String txtDpi, String txtNombre, String txtApellido, String txtDireccion, String txtTelefonoCasa, String txtTelefonoMovil, String txtNombrecontacto, String txtTelefonoContacto)
+        {
+
 
             return RedirectToAction("Index", "Home", new { load = "pgsql" });
         }

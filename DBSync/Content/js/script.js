@@ -111,6 +111,44 @@ $(document).ready(function(){
 
 		};
 
+		// Acción para el botón de modificar contacto MySQL
+		function ActivarBotonesModificar(){
+			var $btnModificarContactoMySQL = $(".btnModificarContactoMySQL");
+
+			$btnModificarContactoMySQL.each(function(){
+				var $this = $(this);
+
+				$this.on("click", function(){
+					var contacto = JSON.parse($this.attr("data-id"));
+					//var contacto = $this.attr("data-id");
+
+					var newContacto = {
+						dpi : contacto.dpi,
+						nombre : contacto.nombre,
+						apellido : contacto.apellido,
+						direccion : contacto.direccion,
+						telefonoCasa : contacto.telefonoCasa,
+						telefonoMovil : contacto.telefonoMovil,
+						nombreContacto : contacto.nombreContacto,
+						numeroContacto : contacto.numeroContacto
+					};
+					console.log(newContacto);
+					$.ajax({
+						type: "POST",
+						url: root + "DataBase/mysqlUpdateDelete",
+						contentType: "application/json",
+						data: JSON.stringify({ modContacto : newContacto }),
+						dataType: 'html',
+						success: function(view) {
+							// Inserta el contenido de la vista parcial en el workspace
+							$workspace.html(view);
+						}
+					});
+				});
+
+			});
+		};
+
 		// Funcion para cargar el contenido de un workspace espeficico
 		function cargarWorkspace(pagina, panel){
 			$.ajax({
@@ -122,6 +160,9 @@ $(document).ready(function(){
 
 					// Activa los eventos de los botones del workspace
 					eventosBotonesMantenimiento(panel);
+
+					// Activa los botones para eliminar y modificar
+					ActivarBotonesModificar();
 				}
 			});
 		};

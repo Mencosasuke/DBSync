@@ -7,9 +7,10 @@
 <ul class="nav nav-pills">
     <li role="presentation" class="active"><a id="mantenimientoPgSQL" href="#">Mantenimiento</a></li>
     <li role="presentation"><a id="nuevoPgSQL" href="#">Nuevo</a></li>
+    <li role="presentation" class="disabled"><a id="modificarPgSQL" href="#">Modificar</a></li>
 </ul>
 <br />
-<div id="panelMantenimientoPgSQL" class="panel panel-primary">
+<div id="panelMantenimientoPgSQL" class="panel">
     <div class="panel-body">
         <div class="panel panel-default">
             <div class="panel-heading">Contactos almacenados en base de datos PostgreSQL</div>
@@ -41,7 +42,7 @@
                             <td>@contacto.numeroContacto</td>
                             <td>
                                 <button class="btn btn-info" type="button">
-                                    @Html.ActionLink("Modificar", "ModificarPgSQL", "DataBase", new { dpi = contacto.dpi }, new { @style = "color:#FFF;" })
+                                    @Html.ActionLink("Modificar", "mysqlUpdateDelete", "DataBase", new { modContacto = contacto }, new { @style = "color:#FFF;" })
                                 </button>
                                 <button class="btn btn-danger" type="button">
                                     @Html.ActionLink("Eliminar", "EliminarPgSQL", "DataBase", new { dpi = contacto.dpi }, new { @style = "color:#FFF;" })
@@ -54,30 +55,33 @@
         </div>
     </div>
 </div>
-<div id="panelAddPgSQL" class="panel panel-primary hidden">
+<div id="panelAddPgSQL" class="panel hidden">
     <div class="panel-body">
         @using (@Html.BeginForm("InsertarContactoPgSQL", "DataBase", FormMethod.Post))
         {
-            <label for="txtDpi">DPI:</label>
-            <input id="txtDpi" name="txtDpi" type="text" class="form-control" placeholder="DPI" aria-describedby="basic-addon1"><br />
-            <label for="txtNombre">Nombre:</label>
-            <input id="txtNombre"  name="txtNombre" type="text" class="form-control" placeholder="Nombre" aria-describedby="basic-addon1"><br />
-            <label for="txtApellido">Apellido:</label>
-            <input id="txtApellido" name="txtApellido" type="text" class="form-control" placeholder="Apellido" aria-describedby="basic-addon1"><br />
-            <label for="txtDireccion">Dirección:</label>
-            <input id="txtDireccion" name="txtDireccion" type="text" class="form-control" placeholder="Dirección" aria-describedby="basic-addon1"><br />
-            <label for="txtTelefonoCasa">Teléfono Casa:</label>
-            <input id="txtTelefonoCasa" name="txtTelefonoCasa" type="text" class="form-control" placeholder="Teléfono de casa" aria-describedby="basic-addon1"><br />
-            <label for="txtTelefonoMovil">Teléfono Móvil:</label>
-            <input id="txtTelefonoMovil" name="txtTelefonoMovil" type="text" class="form-control" placeholder="Teléfono de móvil" aria-describedby="basic-addon1"><br />
-            <label for="txtNombreContacto">Nombre Contacto:</label>
-            <input id="txtNombreContacto" name="txtNombreContacto" type="text" class="form-control" placeholder="Nombre de contacto" aria-describedby="basic-addon1"><br />
-            <label for="txtTelefonoContacto">Teléfono Contacto:</label>
-            <input id="txtTelefonoContacto" name="txtTelefonoContacto" type="text" class="form-control" placeholder="Teléfono de contacto" aria-describedby="basic-addon1"><br />
-            <div class="btn-group">
-                <input type="submit" value="Aceptar" class="btn btn-primary" />
-                <input id="btnCancelarNuevoPgSQL" type="submit" value="Cancelar" class="btn btn-danger" />
-            </div>
+            <fieldset>
+                <legend>Nuevo Contacto PostgreSQL</legend>
+                <label for="txtDpi">DPI:</label>
+                <input id="txtDpi" name="txtDpi" type="text" class="form-control" placeholder="DPI" aria-describedby="basic-addon1"><br />
+                <label for="txtNombre">Nombre:</label>
+                <input id="txtNombre"  name="txtNombre" type="text" class="form-control" placeholder="Nombre" aria-describedby="basic-addon1"><br />
+                <label for="txtApellido">Apellido:</label>
+                <input id="txtApellido" name="txtApellido" type="text" class="form-control" placeholder="Apellido" aria-describedby="basic-addon1"><br />
+                <label for="txtDireccion">Dirección:</label>
+                <input id="txtDireccion" name="txtDireccion" type="text" class="form-control" placeholder="Dirección" aria-describedby="basic-addon1"><br />
+                <label for="txtTelefonoCasa">Teléfono Casa:</label>
+                <input id="txtTelefonoCasa" name="txtTelefonoCasa" type="text" class="form-control" placeholder="Teléfono de casa" aria-describedby="basic-addon1"><br />
+                <label for="txtTelefonoMovil">Teléfono Móvil:</label>
+                <input id="txtTelefonoMovil" name="txtTelefonoMovil" type="text" class="form-control" placeholder="Teléfono de móvil" aria-describedby="basic-addon1"><br />
+                <label for="txtNombreContacto">Nombre Contacto:</label>
+                <input id="txtNombreContacto" name="txtNombreContacto" type="text" class="form-control" placeholder="Nombre de contacto" aria-describedby="basic-addon1"><br />
+                <label for="txtTelefonoContacto">Teléfono Contacto:</label>
+                <input id="txtTelefonoContacto" name="txtTelefonoContacto" type="text" class="form-control" placeholder="Teléfono de contacto" aria-describedby="basic-addon1"><br />
+                <div class="btn-group">
+                    <input type="submit" value="Aceptar" class="btn btn-success" />
+                    <input id="btnCancelarNuevoPgSQL" type="submit" value="Cancelar" class="btn btn-danger" />
+                </div>
+            </fieldset>
         }
     </div>
 </div>
