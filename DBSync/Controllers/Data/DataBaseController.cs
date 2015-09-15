@@ -201,7 +201,7 @@ namespace DBSync.Controllers.Home
 
             int rowsAffected = conexionPgSQL.ModificarContacto(dpiOriginal, contacto);
 
-            return RedirectToAction("Index", "Home", new { load = "mysql" });
+            return RedirectToAction("Index", "Home", new { load = "pgsql" });
         }
 
     }
