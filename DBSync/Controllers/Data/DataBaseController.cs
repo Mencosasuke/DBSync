@@ -42,6 +42,8 @@ namespace DBSync.Controllers.Home
             // Arma la lista de los contactos obtenidos en la base de datos de MySQL
             listaContactos = dataHelper.ArmarListaContactosMySQL(conexionMySQL.ObtenerRegistros()).OrderBy(lc => lc.dpi).ThenBy(lc => lc.nombre).ThenBy(lc => lc.apellido).ToList();
 
+            conexionMySQL.Close();
+
             ViewBag.ListaContactos = listaContactos;
 
             return View();
@@ -67,6 +69,8 @@ namespace DBSync.Controllers.Home
             // Arma la lista de los contactos obtenidos en la base de datos de MySQL
             listaContactos = dataHelper.ArmarListaContactosMySQL(conexionMySQL.ObtenerRegistros()).OrderBy(lc => lc.dpi).ThenBy(lc => lc.nombre).ThenBy(lc => lc.apellido).ToList();
 
+            conexionMySQL.Close();
+
             ViewBag.ListaContactos = listaContactos;
 
             return View();
@@ -85,6 +89,8 @@ namespace DBSync.Controllers.Home
 
             // Arma la lista de los contactos obtenidos en la base de datos de PostgreSQL
             listaContactos = dataHelper.ArmarListaContactosPgSQL(conexionPgSQL.ObtenerRegistros()).OrderBy(lc => lc.dpi).ThenBy(lc => lc.nombre).ThenBy(lc => lc.apellido).ToList();
+
+            conexionPgSQL.Close();
 
             ViewBag.ListaContactos = listaContactos;
 
@@ -110,6 +116,8 @@ namespace DBSync.Controllers.Home
 
             // Arma la lista de los contactos obtenidos en la base de datos de PostgreSQL
             listaContactos = dataHelper.ArmarListaContactosPgSQL(conexionPgSQL.ObtenerRegistros()).OrderBy(lc => lc.dpi).ThenBy(lc => lc.nombre).ThenBy(lc => lc.apellido).ToList();
+
+            conexionPgSQL.Close();
 
             ViewBag.ListaContactos = listaContactos;
 

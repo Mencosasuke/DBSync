@@ -116,56 +116,104 @@ namespace DBSync.Helper
                                     }
                                     break;
                                 case "M":
-                                    // Si el DPI original y el DPI nuevo son iguales, busca la existencia de los registros con ese DPI
+                                    // Si el DPI nuevo y el anterior no cambian, solo se actualiza o inserta el registro en ambas bases
                                     if (query.DpiOriginal == query.DpiModificado)
                                     {
                                         // Verifica si el registro existe o no en ambas bases de datos
                                         if (conexionMySQL.ConsultarRegistro(query.DpiOriginal))
                                         {
-                                            // Si el usuario existe, ejecuta la consulta especifica
+                                            // Si el usuario existe, hace un Update
                                             conexionMySQL.EjecutarQuery(query.QueryString);
                                         }
                                         else
                                         {
-                                            // De lo contrario, ejecutará la consulta alternativa
+                                            // De lo contrario, hace un Insert
                                             conexionMySQL.EjecutarQuery(query.QueryAlterno);
                                         }
 
                                         if (conexionPgSQL.ConsultarRegistro(query.DpiOriginal))
                                         {
-                                            // Si el usuario existe, ejecuta la consulta especifica
+                                            // Si el usuario existe, hace un Update
                                             conexionPgSQL.EjecutarQuery(query.QueryString);
                                         }
                                         else
                                         {
-                                            // De lo contrario, ejecutará la consulta alternativa
+                                            // De lo contrario, hace un Insert
                                             conexionPgSQL.EjecutarQuery(query.QueryAlterno);
                                         }
                                     }
-                                    // De lo contrario, si el DPI cambió, se buscara la existencia de los registros en base a ese nuevo DPI
+                                    // Si no
                                     else
                                     {
-                                        // Verifica si el registro existe o no en ambas bases de datos
-                                        if (conexionMySQL.ConsultarRegistro(query.DpiModificado))
+                                        // Si el DPI original existe en la base de datos
+                                        if (conexionMySQL.ConsultarRegistro(query.DpiOriginal))
                                         {
-                                            // Si el usuario existe, ejecuta la consulta especifica
-                                            conexionMySQL.EjecutarQuery(query.QueryString);
+                                            // Si el DPI nuevo existe en la base de datos
+                                            if (conexionMySQL.ConsultarRegistro(query.DpiModificado))
+                                            {
+                                                // Elimina el registro del DPI viejo
+                                                conexionMySQL.EjecutarQuery(String.Format("DELETE FROM contacto WHERE dpi='{0}'", query.DpiOriginal));
+
+                                                // Hace un update al registro del DPI nuevo
+                                                String newQuery = String.Format(query.QueryString.Substring(0, query.QueryString.IndexOf("WHERE")) + "WHERE dpi='{0}'", query.DpiModificado);
+                                                conexionMySQL.EjecutarQuery(newQuery);
+                                            }
+                                            // si no, solo se hace el update normal
+                                            else
+                                            {
+                                                conexionMySQL.EjecutarQuery(query.QueryString);
+                                            }
                                         }
+                                        // de lo contrario, Inserta (o hace un Update) del registro con el nuevo DPI
                                         else
                                         {
-                                            // De lo contrario, ejecutará la consulta alternativa
-                                            conexionMySQL.EjecutarQuery(query.QueryAlterno);
+                                            // Si el nuevo DPI existe, se hace un Update
+                                            if (conexionMySQL.ConsultarRegistro(query.DpiModificado))
+                                            {
+                                                String newQuery = String.Format(query.QueryString.Substring(0, query.QueryString.IndexOf("WHERE")) + "WHERE dpi='{0}'", query.DpiModificado);
+                                                conexionMySQL.EjecutarQuery(newQuery);
+                                            }
+                                            // de lo contrario, solo se inserta el nuevo registro
+                                            else
+                                            {
+                                                // De lo contrario, hace un Insert
+                                                conexionMySQL.EjecutarQuery(query.QueryAlterno);
+                                            }
                                         }
 
-                                        if (conexionPgSQL.ConsultarRegistro(query.DpiModificado))
+                                        if (conexionPgSQL.ConsultarRegistro(query.DpiOriginal))
                                         {
-                                            // Si el usuario existe, ejecuta la consulta especifica
-                                            conexionPgSQL.EjecutarQuery(query.QueryString);
+                                            // Si el DPI nuevo existe en la base de datos
+                                            if (conexionPgSQL.ConsultarRegistro(query.DpiModificado))
+                                            {
+                                                // Elimina el registro del DPI viejo
+                                                conexionPgSQL.EjecutarQuery(String.Format("DELETE FROM contacto WHERE dpi='{0}'", query.DpiOriginal));
+
+                                                // Hace un update al registro del DPI nuevo
+                                                String newQuery = String.Format(query.QueryString.Substring(0, query.QueryString.IndexOf("WHERE")) + "WHERE dpi='{0}'", query.DpiModificado);
+                                                conexionPgSQL.EjecutarQuery(newQuery);
+                                            }
+                                            // si no, solo se hace el update normal
+                                            else
+                                            {
+                                                conexionPgSQL.EjecutarQuery(query.QueryString);
+                                            }
                                         }
+                                        // de lo contrario, Inserta (o hace un Update) del registro con el nuevo DPI
                                         else
                                         {
-                                            // De lo contrario, ejecutará la consulta alternativa
-                                            conexionPgSQL.EjecutarQuery(query.QueryAlterno);
+                                            // Si el nuevo DPI existe, se hace un Update
+                                            if (conexionPgSQL.ConsultarRegistro(query.DpiModificado))
+                                            {
+                                                String newQuery = String.Format(query.QueryString.Substring(0, query.QueryString.IndexOf("WHERE")) + "WHERE dpi='{0}'", query.DpiModificado);
+                                                conexionPgSQL.EjecutarQuery(newQuery);
+                                            }
+                                            // de lo contrario, solo se inserta el nuevo registro
+                                            else
+                                            {
+                                                // De lo contrario, hace un Insert
+                                                conexionPgSQL.EjecutarQuery(query.QueryAlterno);
+                                            }
                                         }
                                     }
                                     break;
@@ -212,6 +260,11 @@ namespace DBSync.Helper
                 return false;
             }
 
+            return true;
+        }
+
+        private bool ProcesoSincronizacion(String pathFile, String pathFileLog, String pathFileLogBackup)
+        {
             return true;
         }
     }

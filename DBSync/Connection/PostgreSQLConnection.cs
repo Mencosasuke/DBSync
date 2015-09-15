@@ -31,11 +31,6 @@ namespace DBSync.Connection
         private NpgsqlDataReader dataReader;
 
         /// <summary>
-        /// Variable que guarda la sentencia a ejecutar
-        /// </summary>
-        private String query;
-
-        /// <summary>
         /// Variable que indica cuantas tuplas fueron modificadas
         /// </summary>
         private int rowsAffected;
@@ -76,7 +71,7 @@ namespace DBSync.Connection
         /// Metodo para cerrar la conexion a la base de datos MySQL
         /// </summary>
         /// <returns>Valor booleando par aindicar si la conexion fue exitosa o no</returns>
-        private bool Close()
+        public bool Close()
         {
             try
             {
@@ -98,31 +93,33 @@ namespace DBSync.Connection
         {
             rowsAffected = 0;
 
-            query = String.Empty;
-            query = "INSERT INTO contacto (dpi, nombre, apellido, direccion, telefono_casa, telefono_movil, nombre_contacto, numero_telefono_contacto) VALUES('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}')";
+            String query = "INSERT INTO contacto (dpi, nombre, apellido, direccion, telefono_casa, telefono_movil, nombre_contacto, numero_telefono_contacto) VALUES('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}')";
             query = String.Format(query, contacto.dpi, contacto.nombre, contacto.apellido, contacto.direccion, contacto.telefonoCasa, contacto.telefonoMovil, contacto.nombreContacto, contacto.numeroContacto);
 
-            // Abre la conexión
-            if (this.Open())
+            // Ejecuta la sentencia si el dpi no existe en la base de datos
+            if (!this.ConsultarRegistro(contacto.dpi))
             {
-                // Crea la sentencia de ejecución del query
-                NpgsqlCommand cmd = new NpgsqlCommand(query, conexion);
-
-                // Ejecuta la sentencia
-                rowsAffected = cmd.ExecuteNonQuery();
-                Debug.WriteLine("Sentencia ejecutada exitosamente");
-
-                // Si la sentencia se ejecuta correctamente, se arma la linea a guardar en el log de sentencias
-                if (rowsAffected > 0)
+                // Abre la conexión
+                if (this.Open())
                 {
-                    String queryAlterno = "UPDATE contacto SET dpi='{0}', nombre='{1}', apellido='{2}', direccion='{3}', telefono_casa='{4}', telefono_movil='{5}', nombre_contacto='{6}', numero_telefono_contacto='{7}' WHERE dpi='{8}'";
-                    queryAlterno = String.Format(queryAlterno, contacto.dpi, contacto.nombre, contacto.apellido, contacto.direccion, contacto.telefonoCasa, contacto.telefonoMovil, contacto.nombreContacto, contacto.numeroContacto, contacto.dpi);
+                    // Crea la sentencia de ejecución del query
+                    cmd = new NpgsqlCommand(query, conexion);
 
-                    dh.GuardarSentenciaEnArchivo(queryAlterno, "mysql", "I", DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss"), query, contacto.dpi, String.Empty);
+                        rowsAffected = cmd.ExecuteNonQuery();
+                        Debug.WriteLine("Sentencia ejecutada exitosamente");
+
+                    // Si la sentencia se ejecuta correctamente, se arma la linea a guardar en el log de sentencias
+                    if (rowsAffected > 0)
+                    {
+                        String queryAlterno = "UPDATE contacto SET dpi='{0}', nombre='{1}', apellido='{2}', direccion='{3}', telefono_casa='{4}', telefono_movil='{5}', nombre_contacto='{6}', numero_telefono_contacto='{7}' WHERE dpi='{8}'";
+                        queryAlterno = String.Format(queryAlterno, contacto.dpi, contacto.nombre, contacto.apellido, contacto.direccion, contacto.telefonoCasa, contacto.telefonoMovil, contacto.nombreContacto, contacto.numeroContacto, contacto.dpi);
+
+                        dh.GuardarSentenciaEnArchivo(queryAlterno, "mysql", "I", DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss"), query, contacto.dpi, String.Empty);
+                    }
+
+                    // Cierra la conexión
+                    this.Close();
                 }
-
-                // Cierra la conexión
-                this.Close();
             }
 
             return rowsAffected;
@@ -139,8 +136,7 @@ namespace DBSync.Connection
 
             rowsAffected = 0;
 
-            query = String.Empty;
-            query = "UPDATE contacto SET dpi='{0}', nombre='{1}', apellido='{2}', direccion='{3}', telefono_casa='{4}', telefono_movil='{5}', nombre_contacto='{6}', numero_telefono_contacto='{7}' WHERE dpi='{8}'";
+            String query = "UPDATE contacto SET dpi='{0}', nombre='{1}', apellido='{2}', direccion='{3}', telefono_casa='{4}', telefono_movil='{5}', nombre_contacto='{6}', numero_telefono_contacto='{7}' WHERE dpi='{8}'";
             query = String.Format(query, contacto.dpi, contacto.nombre, contacto.apellido, contacto.direccion, contacto.telefonoCasa, contacto.telefonoMovil, contacto.nombreContacto, contacto.numeroContacto, dpi);
 
             //Open connection
@@ -178,8 +174,7 @@ namespace DBSync.Connection
 
             rowsAffected = 0;
 
-            query = String.Empty;
-            query = String.Format("DELETE FROM contacto WHERE dpi='{0}'", dpi);
+            String query = String.Format("DELETE FROM contacto WHERE dpi='{0}'", dpi);
 
             if (this.Open())
             {
@@ -210,8 +205,7 @@ namespace DBSync.Connection
         {
             dataReader = null;
 
-            query = String.Empty;
-            query = "SELECT * FROM contacto";
+            String query = "SELECT * FROM contacto";
 
             // Abre la conexion
             if (this.Open())
@@ -235,8 +229,7 @@ namespace DBSync.Connection
         {
             dataReader = null;
 
-            query = String.Empty;
-            query = String.Format("SELECT * FROM contacto WHERE dpi ='{0}'", dpi);
+            String query = String.Format("SELECT * FROM contacto WHERE dpi ='{0}'", dpi);
 
             //Abre la conexion
             if (this.Open())
