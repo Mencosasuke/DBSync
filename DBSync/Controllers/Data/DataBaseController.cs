@@ -267,6 +267,5 @@ namespace DBSync.Controllers.Home
 
             return RedirectToAction("pgsqlUpdateDelete");
         }
-
     }
 }

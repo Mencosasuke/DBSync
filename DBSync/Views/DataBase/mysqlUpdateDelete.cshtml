@@ -15,7 +15,14 @@
 <div id="panelMantenimientoMySQL" class="panel">
     <div class="panel-body">
         <div class="panel panel-default">
-            <div class="panel-heading">Contactos almacenados en base de datos MySQL</div>
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-md-10 textCentered">Contactos almacenados en base de datos MySQL</div>
+                    <div class="col-md-2 textCentered">
+                        <button id="btnSincronizarDB" type="button" class="btn btn-primary">@Html.ActionLink("Sincronizar", "test", "DataBase", null, new { @style = "color: white;" })</button>
+                    </div>
+                </div>
+            </div>
             <table class="table table-striped textCentered">
                 <thead>
                     <tr>

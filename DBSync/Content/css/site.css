@@ -4,7 +4,8 @@
 }
 
 .textCentered > thead > tr > th,
-.textCentered > tbody > tr > td{
+.textCentered > tbody > tr > td,
+div.textCentered{
 	text-align: center;
 }
 

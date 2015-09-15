@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 
 using DBSync.Models;
+using DBSync.Helper;
 
 using System.Diagnostics;
 using System.Configuration;
@@ -37,6 +38,11 @@ namespace DBSync.Connection
         /// Variable que indica cuantas tuplas fueron modificadas
         /// </summary>
         private int rowsAffected;
+
+        /// <summary>
+        /// Instancia de la clase DataHelper
+        /// </summary>
+        private DataHelper dh = new DataHelper();
 
         /// <summary>
         /// Constructor de la clase conexión
@@ -115,6 +121,15 @@ namespace DBSync.Connection
                 rowsAffected = cmd.ExecuteNonQuery();
                 Debug.WriteLine("Sentencia ejecutada exitosamente");
 
+                // Si la sentencia se ejecuta correctamente, se arma la linea a guardar en el log de sentencias
+                if (rowsAffected > 0)
+                {
+                    String queryAlterno = "UPDATE contacto SET dpi='{0}', nombre='{1}', apellido='{2}', direccion='{3}', telefono_casa='{4}', telefono_movil='{5}', nombre_contacto='{6}', numero_telefono_contacto='{7}' WHERE dpi='{8}'";
+                    queryAlterno = String.Format(queryAlterno, contacto.dpi, contacto.nombre, contacto.apellido, contacto.direccion, contacto.telefonoCasa, contacto.telefonoMovil, contacto.nombreContacto, contacto.numeroContacto, contacto.dpi);
+                    
+                    dh.GuardarSentenciaEnArchivo(queryAlterno, "pgsql", "I", DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss"), query);
+                }
+
                 // Cierra la conexión
                 this.Close();
             }
@@ -146,6 +161,15 @@ namespace DBSync.Connection
                 // Ejecuta la sentencia
                 rowsAffected = cmd.ExecuteNonQuery();
 
+                // Si la sentencia se ejecuta correctamente, se arma la linea a guardar en el log de sentencias
+                if (rowsAffected > 0)
+                {
+                    String queryAlterno = "INSERT INTO contacto (dpi, nombre, apellido, direccion, telefono_casa, telefono_movil, nombre_contacto, numero_telefono_contacto) VALUES('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}')";
+                    queryAlterno = String.Format(queryAlterno, contacto.dpi, contacto.nombre, contacto.apellido, contacto.direccion, contacto.telefonoCasa, contacto.telefonoMovil, contacto.nombreContacto, contacto.numeroContacto);
+
+                    dh.GuardarSentenciaEnArchivo(query, "pgsql", "M", DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss"), queryAlterno);
+                }
+
                 // Cierrla la conexión
                 this.Close();
             }
@@ -173,6 +197,12 @@ namespace DBSync.Connection
 
                 // Ejecuta la sentencia
                 rowsAffected = cmd.ExecuteNonQuery();
+
+                // Si la sentencia se ejecuta correctamente, se arma la linea a guardar en el log de sentencias
+                if (rowsAffected > 0)
+                {
+                    dh.GuardarSentenciaEnArchivo(query, "pgsql", "D", DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss"), String.Empty);
+                }
 
                 // Cierra la conexión
                 this.Close();

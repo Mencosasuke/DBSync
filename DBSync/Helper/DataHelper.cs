@@ -7,11 +7,18 @@ using MySql.Data.MySqlClient;
 using Npgsql;
 
 using DBSync.Models;
+using System.IO;
 
 namespace DBSync.Helper
 {
     public class DataHelper
     {
+
+        private static String LOG_PATH = "~/Logs";
+
+        private static String LOG_BACKUP_PATH = "~/Resources/Backup";
+
+        private static String FILE_LOG_NAME = "/queryLogs.txt";
 
         /// <summary>
         /// Arma la lista de contactos con la información obtenida de la DB de MySQL
@@ -69,6 +76,48 @@ namespace DBSync.Helper
             }
 
             return listaContactos;
+        }
+
+
+        /// <summary>
+        /// Guarda en archivos .txt los logs de las consultas realizadas en cualquiera de las dos bases de datos.
+        /// </summary>
+        /// <param name="query">Sentencia a ejecutar en la base de datos</param>
+        /// <param name="targetDatabase">Base de datos en la cual se debe ejecutar el query</param>
+        /// <param name="tipoQuery">Indica si el query fue un Select, Update o Delete</param>
+        /// <param name="timeStamp">Hora exacta en la que se finalizó la consulta</param>
+        /// <param name="queryAlterno">Query alterno que se debe ejecutar si el registro existe o no</param>
+        /// <returns></returns>
+        public bool GuardarSentenciaEnArchivo(String query, String targetDatabase, String tipoQuery, String timeStamp, String queryAlterno)
+        {
+            // Si el directorio no existe, lo crea
+            if (!System.IO.Directory.Exists(HttpContext.Current.Server.MapPath(LOG_PATH)))
+            {
+                System.IO.Directory.CreateDirectory(HttpContext.Current.Server.MapPath(LOG_PATH));
+            }
+
+            if (!System.IO.Directory.Exists(HttpContext.Current.Server.MapPath(LOG_BACKUP_PATH)))
+            {
+                System.IO.Directory.CreateDirectory(HttpContext.Current.Server.MapPath(LOG_BACKUP_PATH));
+            }
+
+            // Inserta los logs dentro del archivo de los archivos de texto de respaldo
+            using (StreamWriter swLog = File.AppendText(HttpContext.Current.Server.MapPath(LOG_PATH + FILE_LOG_NAME)))
+            {
+                swLog.WriteLine(String.Format("|{0}|{1}|{2}|{3}|{4};", timeStamp, targetDatabase, tipoQuery, query, queryAlterno));
+            }
+
+            using (StreamWriter swBackup = File.AppendText(HttpContext.Current.Server.MapPath(LOG_BACKUP_PATH + FILE_LOG_NAME)))
+            {
+                swBackup.WriteLine(String.Format("|{0}|{1}|{2}|{3}|{4};", timeStamp, targetDatabase, tipoQuery, query, queryAlterno));
+            }
+
+            using (StreamWriter swPrincipal = File.AppendText(HttpContext.Current.Server.MapPath(FILE_LOG_NAME)))
+            {
+                swPrincipal.WriteLine(String.Format("|{0}|{1}|{2}|{3}|{4};", timeStamp, targetDatabase, tipoQuery, query, queryAlterno));
+            }
+
+            return true;
         }
     }
 }
