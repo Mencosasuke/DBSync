@@ -4,7 +4,7 @@
 
 -- Dumped from database version 9.4.1
 -- Dumped by pg_dump version 9.4.1
--- Started on 2015-09-14 12:13:41
+-- Started on 2015-09-15 15:55:24
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -15,7 +15,7 @@ SET client_min_messages = warning;
 
 DROP DATABASE "DBSync";
 --
--- TOC entry 1994 (class 1262 OID 16393)
+-- TOC entry 2000 (class 1262 OID 16393)
 -- Name: DBSync; Type: DATABASE; Schema: -; Owner: postgres
 --
 
@@ -44,7 +44,7 @@ CREATE SCHEMA public;
 ALTER SCHEMA public OWNER TO postgres;
 
 --
--- TOC entry 1995 (class 0 OID 0)
+-- TOC entry 2001 (class 0 OID 0)
 -- Dependencies: 5
 -- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: postgres
 --
@@ -53,7 +53,7 @@ COMMENT ON SCHEMA public IS 'standard public schema';
 
 
 --
--- TOC entry 173 (class 3079 OID 11855)
+-- TOC entry 174 (class 3079 OID 11855)
 -- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
 --
 
@@ -61,8 +61,8 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
 --
--- TOC entry 1997 (class 0 OID 0)
--- Dependencies: 173
+-- TOC entry 2003 (class 0 OID 0)
+-- Dependencies: 174
 -- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
 --
 
@@ -95,7 +95,39 @@ CREATE TABLE contacto (
 ALTER TABLE contacto OWNER TO postgres;
 
 --
--- TOC entry 1880 (class 2606 OID 16398)
+-- TOC entry 173 (class 1259 OID 24576)
+-- Name: usuario; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE usuario (
+    usuario character varying(20),
+    password character varying(50),
+    rol character varying(20)
+);
+
+
+ALTER TABLE usuario OWNER TO postgres;
+
+--
+-- TOC entry 1994 (class 0 OID 16394)
+-- Dependencies: 172
+-- Data for Name: contacto; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+
+
+--
+-- TOC entry 1995 (class 0 OID 24576)
+-- Dependencies: 173
+-- Data for Name: usuario; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+INSERT INTO usuario (usuario, password, rol) VALUES ('dmencos', 'test', 'usuario');
+INSERT INTO usuario (usuario, password, rol) VALUES ('admin', 'test', 'administrador');
+
+
+--
+-- TOC entry 1884 (class 2606 OID 16398)
 -- Name: pk_dpi; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
@@ -104,7 +136,7 @@ ALTER TABLE ONLY contacto
 
 
 --
--- TOC entry 1996 (class 0 OID 0)
+-- TOC entry 2002 (class 0 OID 0)
 -- Dependencies: 5
 -- Name: public; Type: ACL; Schema: -; Owner: postgres
 --
@@ -115,7 +147,7 @@ GRANT ALL ON SCHEMA public TO postgres;
 GRANT ALL ON SCHEMA public TO PUBLIC;
 
 
--- Completed on 2015-09-14 12:13:41
+-- Completed on 2015-09-15 15:55:24
 
 --
 -- PostgreSQL database dump complete
