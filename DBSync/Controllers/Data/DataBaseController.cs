@@ -276,9 +276,9 @@ namespace DBSync.Controllers.Home
         [HttpGet]
         public ActionResult SincronizarDataBase(String dbTarget)
         {
-            DataHelper dh = new DataHelper();
+            SyncHelper sh = new SyncHelper();
 
-            dh.SincronizarBaseDeDatos();
+            sh.SincronizarBaseDeDatos();
 
             return RedirectToAction("Index", "Home", new { load = dbTarget });
         }

@@ -245,7 +245,7 @@ namespace DBSync.Connection
             dataReader = null;
 
             query = String.Empty;
-            query = "SELECT * FROM contacto";
+            query = String.Format("SELECT * FROM contacto WHERE dpi ='{0}'", dpi);
 
             //Abre la conexion
             if (this.Open())
@@ -258,10 +258,46 @@ namespace DBSync.Connection
 
                 // Si los resultados no son mayores a 0, no encontro ningun registro con ese dpi
                 // retorna falso, de lo contrario, retorna verdadero
-                if (!(dataReader.FieldCount > 0))
+                if (!dataReader.HasRows)
+                {
+                    // Cierra la conexión
+                    this.Close();
+
+                    return false;
+                }
+            }
+
+            // Cierra la conexión
+            this.Close();
+
+            return true;
+        }
+
+        /// <summary>
+        /// Ejecuta el query enviado en MySQL
+        /// </summary>
+        /// <param name="query">Sentencia a ejecutar en la base de datos MySQL</param>
+        /// <returns></returns>
+        public bool EjecutarQuery(String query)
+        {
+            rowsAffected = 0;
+
+            if (this.Open())
+            {
+                // Crea la sentencia de ejecución del query
+                cmd = new MySqlCommand(query, conexion);
+
+                // Ejecuta la sentencia
+                rowsAffected = cmd.ExecuteNonQuery();
+
+                // Si la sentencia se ejecuta correctamente, se arma la linea a guardar en el log de sentencias
+                if(!(rowsAffected > 0))
                 {
                     return false;
                 }
+
+                // Cierra la conexión
+                this.Close();
             }
 
             return true;

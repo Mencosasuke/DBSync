@@ -134,6 +134,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helper\DataHelper.cs" />
+    <Compile Include="Helper\SyncHelper.cs" />
     <Compile Include="Models\Contacto.cs" />
     <Compile Include="Models\Query.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
