@@ -267,5 +267,20 @@ namespace DBSync.Controllers.Home
 
             return RedirectToAction("pgsqlUpdateDelete");
         }
+
+        /// <summary>
+        /// Ejecuta la solicitud para sincronizar las bases de datos
+        /// </summary>
+        /// <param name="dbTarget"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult SincronizarDataBase(String dbTarget)
+        {
+            DataHelper dh = new DataHelper();
+
+            dh.SincronizarBaseDeDatos();
+
+            return RedirectToAction("Index", "Home", new { load = dbTarget });
+        }
     }
 }

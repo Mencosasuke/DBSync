@@ -118,7 +118,7 @@ namespace DBSync.Connection
                     String queryAlterno = "UPDATE contacto SET dpi='{0}', nombre='{1}', apellido='{2}', direccion='{3}', telefono_casa='{4}', telefono_movil='{5}', nombre_contacto='{6}', numero_telefono_contacto='{7}' WHERE dpi='{8}'";
                     queryAlterno = String.Format(queryAlterno, contacto.dpi, contacto.nombre, contacto.apellido, contacto.direccion, contacto.telefonoCasa, contacto.telefonoMovil, contacto.nombreContacto, contacto.numeroContacto, contacto.dpi);
 
-                    dh.GuardarSentenciaEnArchivo(queryAlterno, "mysql", "I", DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss"), query);
+                    dh.GuardarSentenciaEnArchivo(queryAlterno, "mysql", "I", DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss"), query, contacto.dpi, String.Empty);
                 }
 
                 // Cierra la conexión
@@ -158,7 +158,7 @@ namespace DBSync.Connection
                     String queryAlterno = "INSERT INTO contacto (dpi, nombre, apellido, direccion, telefono_casa, telefono_movil, nombre_contacto, numero_telefono_contacto) VALUES('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}')";
                     queryAlterno = String.Format(queryAlterno, contacto.dpi, contacto.nombre, contacto.apellido, contacto.direccion, contacto.telefonoCasa, contacto.telefonoMovil, contacto.nombreContacto, contacto.numeroContacto);
 
-                    dh.GuardarSentenciaEnArchivo(query, "mysql", "M", DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss"), queryAlterno);
+                    dh.GuardarSentenciaEnArchivo(query, "mysql", "M", DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss"), queryAlterno, dpi, contacto.dpi);
                 }
 
                 // Cierrla la conexión
@@ -192,7 +192,7 @@ namespace DBSync.Connection
                 // Si la sentencia se ejecuta correctamente, se arma la linea a guardar en el log de sentencias
                 if (rowsAffected > 0)
                 {
-                    dh.GuardarSentenciaEnArchivo(query, "mysql", "D", DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss"), String.Empty);
+                    dh.GuardarSentenciaEnArchivo(query, "mysql", "D", DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss"), String.Empty, dpi, String.Empty);
                 }
 
                 // Cierra la conexión
@@ -224,6 +224,38 @@ namespace DBSync.Connection
             }
 
             return dataReader;
+        }
+
+        /// <summary>
+        /// Verifica si en la base de datos existe un registro con el dpi enviado
+        /// </summary>
+        /// <param name="dpi">DPI de la persona que se desea buscar en la base de datos</param>
+        /// <returns>Valor booleano que india si el registro existe o no</returns>
+        public bool ConsultarRegistro(String dpi)
+        {
+            dataReader = null;
+
+            query = String.Empty;
+            query = "SELECT * FROM contacto";
+
+            //Abre la conexion
+            if (this.Open())
+            {
+                // Crea la sentencia de ejecucion del select
+                cmd = new NpgsqlCommand(query, conexion);
+
+                // Ejecuta la sentencia y la guarda en el dataReader
+                dataReader = cmd.ExecuteReader();
+
+                // Si los resultados no son mayores a 0, no encontro ningun registro con ese dpi
+                // retorna falso, de lo contrario, retorna verdadero
+                if (!(dataReader.FieldCount > 0))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
     }

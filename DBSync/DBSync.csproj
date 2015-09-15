@@ -135,6 +135,7 @@
     </Compile>
     <Compile Include="Helper\DataHelper.cs" />
     <Compile Include="Models\Contacto.cs" />
+    <Compile Include="Models\Query.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
