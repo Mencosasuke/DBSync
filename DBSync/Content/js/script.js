@@ -219,10 +219,12 @@ $(document).ready(function(){
 
 		};
 
-		// Acción para el botón de modificar contacto MySQL y PostgreSQL
-		function ActivarBotonesModificar(){
+		// Acción para el botón de modificar y eliminar contacto MySQL y PostgreSQL
+		function ActivarBotonesModificarEliminar(){
 			var $btnModificarContactoMySQL = $(".btnModificarContactoMySQL"),
-				$btnModificarContactoPgSQL = $(".btnModificarContactoPgSQL")
+				$btnEliminarContactoMySQL = $(".btnEliminarContactoMySQL"),
+				$btnModificarContactoPgSQL = $(".btnModificarContactoPgSQL"),
+				$btnEliminarContactoPgSQL = $(".btnEliminarContactoPgSQL");
 
 			$btnModificarContactoMySQL.each(function(){
 				var $this = $(this);
@@ -255,7 +257,30 @@ $(document).ready(function(){
 							eventosBotonesMantenimiento("mysql", "modificar");
 
 							// Activa los botones para eliminar y modificar
-							ActivarBotonesModificar();
+							ActivarBotonesModificarEliminar();
+						}
+					});
+				});
+			});
+
+			$btnEliminarContactoMySQL.each(function(){
+				var $this = $(this);
+
+				$this.on("click", function(){
+					var dpi = $this.attr("data-id");
+
+					$.ajax({
+						type: "POST",
+						url: root + "DataBase/MysqlDelete?dpi=" + dpi,
+						success: function(view){
+							// Inserta el contenido de la vista parcial en el workspace
+							$workspace.html(view);
+							
+							// Activa los botones para eliminar y modificar
+							eventosBotonesMantenimiento("mysql");
+
+							// Activa los botones para eliminar y modificar
+							ActivarBotonesModificarEliminar();
 						}
 					});
 				});
@@ -287,16 +312,40 @@ $(document).ready(function(){
 						success: function(view) {
 							// Inserta el contenido de la vista parcial en el workspace
 							$workspace.html(view);
-							console.log("evento lanzado");
+
 							// Activa los botones para eliminar y modificar
 							eventosBotonesMantenimiento("pgsql", "modificar");
 
 							// Activa los botones para eliminar y modificar
-							ActivarBotonesModificar();
+							ActivarBotonesModificarEliminar();
 						}
 					});
 				});
 			});
+
+			$btnEliminarContactoPgSQL.each(function(){
+				var $this = $(this);
+				
+				$this.on("click", function(){
+					var dpi = $this.attr("data-id");
+
+					$.ajax({
+						type: "POST",
+						url: root + "DataBase/PgsqlDelete?dpi=" + dpi,
+						success: function(view){
+							// Inserta el contenido de la vista parcial en el workspace
+							$workspace.html(view);
+							
+							// Activa los botones para eliminar y modificar
+							eventosBotonesMantenimiento("pgsql");
+
+							// Activa los botones para eliminar y modificar
+							ActivarBotonesModificarEliminar();
+						}
+					});
+				});
+			});
+
 		};
 
 		// Funcion para cargar el contenido de un workspace espeficico
@@ -312,7 +361,7 @@ $(document).ready(function(){
 					eventosBotonesMantenimiento(panel);
 
 					// Activa los botones para eliminar y modificar
-					ActivarBotonesModificar();
+					ActivarBotonesModificarEliminar();
 				}
 			});
 		};

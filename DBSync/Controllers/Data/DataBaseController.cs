@@ -31,6 +31,25 @@ namespace DBSync.Controllers.Home
         /// <summary>
         /// Renderiza la vista parcial para el mantenimiento de contactos MySQL
         /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult mysqlUpdateDelete()
+        {
+            DataHelper dataHelper = new DataHelper();
+
+            List<Contacto> listaContactos = new List<Contacto>();
+
+            // Arma la lista de los contactos obtenidos en la base de datos de MySQL
+            listaContactos = dataHelper.ArmarListaContactosMySQL(conexionMySQL.ObtenerRegistros()).OrderBy(lc => lc.dpi).ThenBy(lc => lc.nombre).ThenBy(lc => lc.apellido).ToList();
+
+            ViewBag.ListaContactos = listaContactos;
+
+            return View();
+        }
+
+        /// <summary>
+        /// Renderiza la vista parcial para el mantenimiento de contactos MySQL
+        /// </summary>
         /// <param name="modContacto">Contacto a modificar (opcional)</param>
         /// <returns></returns>
         [HttpPost]
@@ -47,6 +66,25 @@ namespace DBSync.Controllers.Home
 
             // Arma la lista de los contactos obtenidos en la base de datos de MySQL
             listaContactos = dataHelper.ArmarListaContactosMySQL(conexionMySQL.ObtenerRegistros()).OrderBy(lc => lc.dpi).ThenBy(lc => lc.nombre).ThenBy(lc => lc.apellido).ToList();
+
+            ViewBag.ListaContactos = listaContactos;
+
+            return View();
+        }
+
+        /// <summary>
+        /// Renderiza la vista parcial para el mantenimiento de contactos PostgreSQL
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult pgsqlUpdateDelete()
+        {
+            DataHelper dataHelper = new DataHelper();
+
+            List<Contacto> listaContactos = new List<Contacto>();
+
+            // Arma la lista de los contactos obtenidos en la base de datos de PostgreSQL
+            listaContactos = dataHelper.ArmarListaContactosPgSQL(conexionPgSQL.ObtenerRegistros()).OrderBy(lc => lc.dpi).ThenBy(lc => lc.nombre).ThenBy(lc => lc.apellido).ToList();
 
             ViewBag.ListaContactos = listaContactos;
 
@@ -202,6 +240,32 @@ namespace DBSync.Controllers.Home
             int rowsAffected = conexionPgSQL.ModificarContacto(dpiOriginal, contacto);
 
             return RedirectToAction("Index", "Home", new { load = "pgsql" });
+        }
+
+        /// <summary>
+        /// Elimina un registro de la base de datos MySQL
+        /// </summary>
+        /// <param name="dpi">DPI del contacto que se quiere eliminar</param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult MysqlDelete(String dpi)
+        {
+            int rowsAffected = conexionMySQL.EliminarContacto(dpi);
+
+            return RedirectToAction("mysqlUpdateDelete");
+        }
+
+        /// <summary>
+        /// Elimina un registro de la base de datos PostgreSQL
+        /// </summary>
+        /// <param name="dpi">DPI del contacto que se quiere eliminar</param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult PgsqlDelete(String dpi)
+        {
+            int rowsAffected = conexionPgSQL.EliminarContacto(dpi);
+
+            return RedirectToAction("pgsqlUpdateDelete");
         }
 
     }
