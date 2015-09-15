@@ -295,5 +295,43 @@ namespace DBSync.Connection
             return true;
         }
 
+        /// <summary>
+        /// Verifica si en la base de datos existe un el usuario
+        /// </summary>
+        /// <param name="username">Nombre de usuario</param>
+        /// <param name="password">Passwor de usuario</param>
+        /// <returns></returns>
+        public bool Login(String username, String password)
+        {
+            dataReader = null;
+
+            String query = String.Format("SELECT * FROM usuario WHERE usuario ='{0}' AND password = '{1}'", username, password);
+
+            //Abre la conexion
+            if (this.Open())
+            {
+                // Crea la sentencia de ejecucion del select
+                cmd = new MySqlCommand(query, conexion);
+
+                // Ejecuta la sentencia y la guarda en el dataReader
+                dataReader = cmd.ExecuteReader();
+
+                // Si los resultados no son mayores a 0, no encontro ningun registro con ese dpi
+                // retorna falso, de lo contrario, retorna verdadero
+                if (!dataReader.HasRows)
+                {
+                    // Cierra la conexión
+                    this.Close();
+
+                    return false;
+                }
+            }
+
+            // Cierra la conexión
+            this.Close();
+
+            return true;
+        }
+
     }
 }

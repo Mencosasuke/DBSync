@@ -1,0 +1,33 @@
+﻿@using System.ComponentModel.DataAnnotations
+
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_LayoutSimple.cshtml";
+    
+    String usuario = String.Empty;
+    String password = String.Empty;
+}
+
+<div class="jumbotron">
+    @using (Html.BeginForm("IniciarSesion", null, new { user = usuario, pass = password }, FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+        <fieldset>
+            <legend>Login &mdash; DBSync UMG</legend>
+
+            <div class="form-group form-group">
+                @Html.LabelFor(u => usuario, "Usuario:", new { @class = "col-sm-2 control-label"})
+                <div class="col-sm-10">
+                    @Html.TextBoxFor(u => usuario, new { @class = "form-control", placeholder = "Username", required = "required" })
+                </div>
+            </div>
+            <div class="form-group form-group">
+                @Html.LabelFor(p => password, "Password:", new { @class = "col-sm-2 control-label" })
+                <div class="col-sm-10">
+                    @Html.PasswordFor(p => password, new { @class = "form-control", placeholder = "Password", required = "required" })
+                </div>
+            </div>
+
+            <input type="submit" value="Aceptar" class="btn btn-primary btn-block" />
+        </fieldset>
+    }
+</div>

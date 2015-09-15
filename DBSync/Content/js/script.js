@@ -252,7 +252,7 @@ $(document).ready(function(){
 						success: function(view) {
 							// Inserta el contenido de la vista parcial en el workspace
 							$workspace.html(view);
-							console.log("evento lanzado");
+
 							// Activa los botones para eliminar y modificar
 							eventosBotonesMantenimiento("mysql", "modificar");
 
@@ -405,6 +405,19 @@ $(document).ready(function(){
 			// Muestra el workspace para PostgreSQL
 			cargarWorkspace("pgsqlUpdateDelete");
 
+    	});
+
+    	// Inicializa eventos de botón LogOut
+    	$("#btnLogOut").on("click", function(){
+    		window.location = root + "Login/LogOut";
+    	});
+
+    	$("#btnManagement").on("click", function(){
+    		window.location = root + "Home/Index?load=mysql";
+    	});
+
+    	$("#btnAbout").on("click", function(){
+    		window.location = root + "Home/About";
     	});
 
     })();

@@ -5,10 +5,18 @@
 
 .textCentered > thead > tr > th,
 .textCentered > tbody > tr > td,
-div.textCentered{
+div.textCentered,
+.textCentered{
 	text-align: center;
 }
 
 .container{
 	width: 85%;
+}
+
+.loginContainer{
+	width: 30%;
+	position: relative;
+	top: 50%;
+	transform: translateY(+50%);
 }

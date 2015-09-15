@@ -21,5 +21,10 @@ namespace DBSync.Controllers.Home
             return View();
         }
 
+        public ActionResult About()
+        {
+            return View();
+        }
+
     }
 }
