@@ -136,6 +136,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helper\DataHelper.cs" />
+    <Compile Include="Helper\EncryptHelper.cs" />
     <Compile Include="Helper\SyncHelper.cs" />
     <Compile Include="Models\Contacto.cs" />
     <Compile Include="Models\Query.cs" />
@@ -146,7 +147,9 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Content Include="Global.asax" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>

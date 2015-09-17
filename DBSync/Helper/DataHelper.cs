@@ -99,6 +99,8 @@ namespace DBSync.Helper
         /// <returns></returns>
         public bool GuardarSentenciaEnArchivo(String query, String targetDatabase, String tipoQuery, String timeStamp, String queryAlterno, String dpiOriginal, String dpiModificado)
         {
+            EncryptHelper encripter = new EncryptHelper();
+
             // Si el directorio no existe, lo crea
             if (!System.IO.Directory.Exists(HttpContext.Current.Server.MapPath(LOG_PATH)))
             {
@@ -113,17 +115,17 @@ namespace DBSync.Helper
             // Inserta los logs dentro del archivo de los archivos de texto de respaldo
             using (StreamWriter swLog = File.AppendText(HttpContext.Current.Server.MapPath(LOG_PATH + FILE_LOG_NAME)))
             {
-                swLog.WriteLine(String.Format("|{0}|{1}|{2}|{3}|{4}|{5}|{6}", timeStamp, targetDatabase, tipoQuery, query, queryAlterno, dpiOriginal, dpiModificado));
+                swLog.WriteLine(encripter.Encrypt(String.Format("|{0}|{1}|{2}|{3}|{4}|{5}|{6}", timeStamp, targetDatabase, tipoQuery, query, queryAlterno, dpiOriginal, dpiModificado)));
             }
 
             using (StreamWriter swBackup = File.AppendText(HttpContext.Current.Server.MapPath(LOG_BACKUP_PATH + FILE_LOG_NAME)))
             {
-                swBackup.WriteLine(String.Format("|{0}|{1}|{2}|{3}|{4}|{5}|{6}", timeStamp, targetDatabase, tipoQuery, query, queryAlterno, dpiOriginal, dpiModificado));
+                swBackup.WriteLine(encripter.Encrypt(String.Format("|{0}|{1}|{2}|{3}|{4}|{5}|{6}", timeStamp, targetDatabase, tipoQuery, query, queryAlterno, dpiOriginal, dpiModificado)));
             }
 
             using (StreamWriter swPrincipal = File.AppendText(HttpContext.Current.Server.MapPath(FILE_LOG_NAME)))
             {
-                swPrincipal.WriteLine(String.Format("|{0}|{1}|{2}|{3}|{4}|{5}|{6}", timeStamp, targetDatabase, tipoQuery, query, queryAlterno, dpiOriginal, dpiModificado));
+                swPrincipal.WriteLine(encripter.Encrypt(String.Format("|{0}|{1}|{2}|{3}|{4}|{5}|{6}", timeStamp, targetDatabase, tipoQuery, query, queryAlterno, dpiOriginal, dpiModificado)));
             }
 
             return true;

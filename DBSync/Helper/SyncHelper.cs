@@ -74,6 +74,7 @@ namespace DBSync.Helper
         /// <returns></returns>
         private bool ProcesoSincronizacion(String pathFile)
         {
+            EncryptHelper encripter = new EncryptHelper();
 
             List<String> listaSentencias = new List<String>();
             List<Query> listaQuerys = new List<Query>();
@@ -86,7 +87,7 @@ namespace DBSync.Helper
                     String linea;
                     while ((linea = sr.ReadLine()) != null)
                     {
-                        listaSentencias.Add(linea);
+                        listaSentencias.Add(encripter.Decrypt(linea));
                     }
                 }
 
@@ -267,7 +268,7 @@ namespace DBSync.Helper
                 {
                     foreach (Query query in listaQuerys)
                     {
-                        swLog.WriteLine(String.Format("x|{0}|{1}|{2}|{3}|{4}|{5}|{6}", query.Hora, query.TargetDatabase, query.TipoQuery, query.QueryString, query.QueryAlterno, query.DpiOriginal, query.DpiModificado));
+                        swLog.WriteLine(encripter.Encrypt(String.Format("x|{0}|{1}|{2}|{3}|{4}|{5}|{6}", query.Hora, query.TargetDatabase, query.TipoQuery, query.QueryString, query.QueryAlterno, query.DpiOriginal, query.DpiModificado)));
                     }
                 }
 
@@ -275,7 +276,7 @@ namespace DBSync.Helper
                 {
                     foreach (Query query in listaQuerys)
                     {
-                        swBackup.WriteLine(String.Format("x|{0}|{1}|{2}|{3}|{4}|{5}|{6}", query.Hora, query.TargetDatabase, query.TipoQuery, query.QueryString, query.QueryAlterno, query.DpiOriginal, query.DpiModificado));
+                        swBackup.WriteLine(encripter.Encrypt(String.Format("x|{0}|{1}|{2}|{3}|{4}|{5}|{6}", query.Hora, query.TargetDatabase, query.TipoQuery, query.QueryString, query.QueryAlterno, query.DpiOriginal, query.DpiModificado)));
                     }
                 }
 
@@ -283,7 +284,7 @@ namespace DBSync.Helper
                 {
                     foreach (Query query in listaQuerys)
                     {
-                        swPrincipal.WriteLine(String.Format("x|{0}|{1}|{2}|{3}|{4}|{5}|{6}", query.Hora, query.TargetDatabase, query.TipoQuery, query.QueryString, query.QueryAlterno, query.DpiOriginal, query.DpiModificado));
+                        swPrincipal.WriteLine(encripter.Encrypt(String.Format("x|{0}|{1}|{2}|{3}|{4}|{5}|{6}", query.Hora, query.TargetDatabase, query.TipoQuery, query.QueryString, query.QueryAlterno, query.DpiOriginal, query.DpiModificado)));
                     }
                 }
 
